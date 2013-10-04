@@ -1,0 +1,9 @@
+.center-wrapper {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+.center-child {
+    display: table-cell;
+    vertical-align: middle;
+}
