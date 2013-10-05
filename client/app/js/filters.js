@@ -7,3 +7,5 @@ angular.module('phonecatFilters', []).filter('checkmark', function() {
     return input ? '\u2713' : '\u2718';
   };
 });
+
+console.log('filters');

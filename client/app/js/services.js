@@ -8,3 +8,5 @@ angular.module('phonecatServices', ['ngResource']).
     query: {method:'GET', params:{phoneId:'phones'}, isArray:true}
   });
 });
+
+console.log('services');

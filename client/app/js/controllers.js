@@ -1,24 +1,23 @@
-'use strict';
+define(function() {
+    'use strict';
 
-/* Controllers */
+    /* Controllers */
+    var controller = {};
+    
+    controller.PhoneListCtrl = function($scope, Phone) {
+        $scope.phones = Phone.query();
+        $scope.orderProp = 'age';
+    }
 
-function PhoneListCtrl($scope, Phone) {
-  $scope.phones = Phone.query();
-  $scope.orderProp = 'age';
-}
+    controller.PhoneDetailCtrl = function($scope, $routeParams, Phone) {
+        $scope.phone = Phone.get({phoneId: $routeParams.phoneId}, function(phone) {
+            $scope.mainImageUrl = phone.images[0];
+        });
 
-
-
-function PhoneDetailCtrl($scope, $routeParams, Phone) {
-  $scope.phone = Phone.get({phoneId: $routeParams.phoneId}, function(phone) {
-    $scope.mainImageUrl = phone.images[0];
-  });
-
-  $scope.setImage = function(imageUrl) {
-    $scope.mainImageUrl = imageUrl;
-  }
-}
-
-
-myApp.controller('PhoneListCtrl', ['$scope', 'Phone', PhoneListCtrl]);
-myApp.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Phone', PhoneDetailCtrl]);
+        $scope.setImage = function(imageUrl) {
+            $scope.mainImageUrl = imageUrl;
+        }
+    }
+    console.log('controllers');
+    return controller;
+});
