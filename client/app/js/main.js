@@ -1,36 +1,52 @@
 requirejs.config({
     paths: {
-        vendor: 'vendor'
+        'angular' : 'vendor/angular.min',
+        'angular_resource' : 'vendor/angular-resource.min',
+        'bootstrap' : 'vendor/bootstrap.min',
+        'jquery' : 'vendor/jquery.min',
+        'domReady' : 'vendor/domReady'
     }, shim: {
-        'vendor/angular.min' : { exports : 'angular' }, 
-        'vendor/angular-resource.min' : ['vendor/angular.min'], 
-        'vendor/bootstrap.min' : ['vendor/jquery.min'], 
-        'controllers' : ['vendor/angular.min'],
-        'directives' : ['vendor/angular.min'],
-        'filters' : ['vendor/angular.min'],
-        'services' : ['vendor/angular.min']
+        'angular' : { exports : 'angular' }, 
+        'angular_resource' : ['angular'], 
+        'bootstrap' : ['jquery'], 
+        'controllers' : ['angular', 'services'],
+        'filters' : ['angular'],
+        'services' : ['angular']
     }
 });
 
+Window.name = "NG_DEFER_BOOTSTRAP!";
+
 define([
-    'vendor/angular.min', 
-    'vendor/angular-resource.min',
-    'vendor/jquery.min',
-    'vendor/bootstrap.min',
+    'angular', 
+    'angular_resource',
+    'jquery',
     'controllers',
-    'directives',
     'filters',
     'services'
-], function(ng, ngResource, jquery, bootstrap, ctrl) {
+], function(angular, angular_resource, $) {
     'use strict';
 
     /* App Module */
-
-    angular.module('hospitalApp', ['phonecatFilters', 'phonecatServices']).
-        config(['$routeProvider', function($routeProvider) {
+    
+    // smart works go here
+    var $html = $('html');
+    angular.module('hospitalApp', [
+            'hospitalControllers', 
+            'hospitalFilters', 
+            'hospitalServices'
+        ]).config(['$routeProvider', function($routeProvider) {
             $routeProvider.
-                when('/phones', {templateUrl: 'partials/phone-list.html', controller: ctrl.PhoneListCtrl}).
-                when('/phones/:phoneId', {templateUrl: 'partials/phone-detail.html', controller: ctrl.PhoneDetailCtrl}).
+                when('/phones', {
+                    templateUrl: 'partials/phone-list.html', 
+                    controller: 'PhoneListCtrl'
+                }).
+                when('/phones/:phoneId', {
+                    templateUrl: 'partials/phone-detail.html', 
+                    controller: 'PhoneDetailCtrl'
+                }).
                otherwise({redirectTo: '/phones'});
     }]);
+    // bootstrap model
+    angular.bootstrap($html, ['hospitalApp']);
 });

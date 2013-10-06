@@ -1,11 +1,10 @@
-'use strict';
+define(['angular'], function(angular) {
+    'use strict';
+    /* Filters */
 
-/* Filters */
-
-angular.module('phonecatFilters', []).filter('checkmark', function() {
-  return function(input) {
-    return input ? '\u2713' : '\u2718';
-  };
+    angular.module('hospitalFilters', []).filter('checkmark', function() {
+      return function(input) {
+        return input ? '\u2713' : '\u2718';
+      };
+    });
 });
-
-console.log('filters');
