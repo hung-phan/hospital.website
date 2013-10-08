@@ -3,8 +3,7 @@ requirejs.config({
         'angular' : 'vendor/angular.min',
         'angular_resource' : 'vendor/angular-resource.min',
         'bootstrap' : 'vendor/bootstrap.min',
-        'jquery' : 'vendor/jquery.min',
-        'domReady' : 'vendor/domReady'
+        'jquery' : 'vendor/jquery.min'
     }, shim: {
         'angular' : { exports : 'angular' }, 
         'angular_resource' : ['angular'], 

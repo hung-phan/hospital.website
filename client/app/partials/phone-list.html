@@ -1,8 +1,6 @@
-<div class="container-fluid">
+<!-- <div class="container-fluid">
   <div class="row-fluid">
     <div class="span2">
-      <!--Sidebar content-->
-
       Search: <input ng-model="query">
       Sort by:
       <select ng-model="orderProp">
@@ -12,8 +10,6 @@
 
     </div>
     <div class="span10">
-      <!--Body content-->
-
       <ul class="phones">
         <li ng-repeat="phone in phones | filter:query | orderBy:orderProp" class="thumbnail">
           <a href="#/phones/{{phone.id}}" class="thumb"><img ng-src="{{phone.imageUrl}}"></a>
@@ -24,4 +20,47 @@
 
     </div>
   </div>
+</div> -->
+<div class="container">
+    <div class="row-fluid">
+      <img src="http://placehold.it/350x150">
+    </div>
+    <div class="row-fluid">
+      <div class="modal-body">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#login" data-toggle="tab">Login</a></li>
+          <li><a href="#create" data-toggle="tab">Create Account</a></li>
+        </ul>
+      </div>
+      <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active in" id="login">
+          <form class="form-horizontal well" method="post">
+            <legend>Login</legend>
+            <div class="control-group">
+                 <label class="control-label" for="inputUsername">Username</label>
+                <div class="controls">
+                  <input type="text" id="inputUsername" placeholder="Your Username">
+                </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="inputPassword">Password</label>
+              <div class="controls">
+                <input type="password" id="inputPassword" placeholder="Password">
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <label class="checkbox">
+                <input type="checkbox"> Remember me
+                </label>
+                <button type="submit" class="btn btn-success">Sign in</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="tab-pane fade" id="create">
+
+        </div>
+      </div>
+    </div>
 </div>
