@@ -20,7 +20,10 @@ define(['angular'], function(angular) {
         .factory('LoginService', function($resource) {
             return $resource('login');
         })
+        .factory('CheckUsernameExistService', function($resource) {
+            return $resource('username-validate');
+        })
         .factory('CreateAccountService', function($resource) {
-              return $resource('create_account');   
+              return $resource('create-account');   
         });
 });

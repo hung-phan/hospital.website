@@ -2,8 +2,9 @@ define([
     'angular',
     'jquery',
     'alertify',
+    'functional',
     'services'
-], function(angular, $, alertify) {
+], function(angular, $, alertify, func) {
     'use strict';
 
     /* Controllers */
@@ -19,9 +20,10 @@ define([
         }
     ]).controller('CreateAccount', [
         '$scope', 
-        '$route',
+        '$location',
+        'CheckUsernameExistService',
         'CreateAccountService',
-        function($scope, $route, CreateAccountService) {
+        function($scope, $location, CheckUsernameExistService, CreateAccountService) {
             
             /* initialize */
             $scope.signup = {
@@ -35,43 +37,41 @@ define([
                 usernameExist : false,
                 success : false
             };
-            
-            CreateAccountService.ws.onmessage = function(message) {
-                var data = JSON.parse(message);
-
-                /* identify message type */
-                switch (data.type) {
-                    case 'validation' :
-                        $scope.signup.usernameExist = data.usernameExist;
-                        break;
-                    case 'successCreateAccount':
-                        $scope.signup.success = data.success;
-                        alertify.log('Account successfully created');
-                        $route.current.templateUrl = 'partials/home.html'; 
-                        break;
-                }
-            };
 
             /* create account with username and password */
             $scope.createAccount = function() {
-                (function() {
-                    /* validation */ 
-                    $scope.signup.passwordIdentical = $scope.signup.password == $scope.signup.confirmation;
-                    /* implement server later */
-                    $scope.signup.usernameExist = false;
-                    $scope.signup.error = !$scope.signup.passwordIdentical || $scope.signup.usernameExist;
-                }());
+                /* validation */ 
+                $scope.signup.passwordIdentical = $scope.signup.password == $scope.signup.confirmation;
+                // uncomment later
+                // $scope.signup.usernameExist = CheckUsernameExistService.query().usernameExist;
+                $scope.signup.error = !$scope.signup.passwordIdentical || $scope.signup.usernameExist;
+                
                 if (!$scope.signup.error) {
                     /* insert account into the server database */
-                    var signup = {
+                    var signup = new CreateAccountService();
+                    func.simpleExtend(signup, {
                         type : 'CreateAccount',
                         firstName : $scope.signup.firstName,
                         lastName : $scope.signup.lastName,
                         username : $scope.signup.username,
                         password : $scope.signup.password
-                    }
-                    CreateAccountService.send(signup);
+                    });
+                    // uncomment later
+                    // signup.$save();
+                    alertify.log('Account successfully created');
+                    $location.path('/login'); 
                 }
+            }
+        }
+    ]).controller('Home', [
+        '$scope',
+        '$location',
+        function($scope, $location) {
+            $scope.test = 'test'; 
+            console.log('Test');
+            var auth = false;
+            if (!auth) {
+                $location.path('/login');
             }
         }
     ]);

@@ -4,7 +4,8 @@ requirejs.config({
         'angular_resource' : 'vendor/angular-resource.min',
         'bootstrap' : 'vendor/bootstrap.min',
         'jquery' : 'vendor/jquery.min',
-        'alertify' : 'vendor/alertify.min'
+        'alertify' : 'vendor/alertify.min',
+        'functional' : 'vendor/functional'
     }, shim: {
         'angular' : { exports : 'angular' }, 
         'angular_resource' : ['angular'], 
@@ -45,6 +46,10 @@ define([
                     when('/create-account', {
                         templateUrl: 'partials/create-account.html', 
                         controller: 'CreateAccount'
+                    }).
+                    when('/home', {
+                        templateUrl: 'partials/home.html',
+                        controller: 'Home'
                     }).
                     otherwise({redirectTo: '/login'});
         }]);
