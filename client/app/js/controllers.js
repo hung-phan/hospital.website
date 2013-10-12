@@ -19,18 +19,37 @@ define([
         }
     ]).controller('CreateAccount', [
         '$scope', 
-        '$route', 
-        function($scope, $route) {
+        '$route',
+        'CreateAccountService',
+        function($scope, $route, CreateAccountService) {
             
-            //initialize
+            /* initialize */
             $scope.signup = {
+                firstName : '',
+                lastName : '',
                 username : '',
                 password : '',
                 confirmation : '',
-                info : '',
                 error : false,
                 passwordIdentical : true,
-                usernameExist : false
+                usernameExist : false,
+                success : false
+            };
+            
+            CreateAccountService.ws.onmessage = function(message) {
+                var data = JSON.parse(message);
+
+                /* identify message type */
+                switch (data.type) {
+                    case 'validation' :
+                        $scope.signup.usernameExist = data.usernameExist;
+                        break;
+                    case 'successCreateAccount':
+                        $scope.signup.success = data.success;
+                        alertify.log('Account successfully created');
+                        $route.current.templateUrl = 'partials/home.html'; 
+                        break;
+                }
             };
 
             /* create account with username and password */
@@ -38,18 +57,20 @@ define([
                 (function() {
                     /* validation */ 
                     $scope.signup.passwordIdentical = $scope.signup.password == $scope.signup.confirmation;
-                    // implement server later
+                    /* implement server later */
                     $scope.signup.usernameExist = false;
                     $scope.signup.error = !$scope.signup.passwordIdentical || $scope.signup.usernameExist;
                 }());
                 if (!$scope.signup.error) {
                     /* insert account into the server database */
                     var signup = {
+                        type : 'CreateAccount',
+                        firstName : $scope.signup.firstName,
+                        lastName : $scope.signup.lastName,
                         username : $scope.signup.username,
-                        password : $scope.signup.password,
-                        info : $scope.signup.info,
+                        password : $scope.signup.password
                     }
-                    alertify.log('Account sucessfully created');
+                    CreateAccountService.send(signup);
                 }
             }
         }

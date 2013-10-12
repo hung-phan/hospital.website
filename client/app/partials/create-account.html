@@ -13,31 +13,38 @@
                         <form name="accountForm" class="form-horizontal" ng-submit="createAccount()">
                             <legend>Create account</legend>
                             <div class="control-group">
+                                <label class="control-label" for="inputFirstName">First name</label>
+                                <div class="controls">
+                                    <input type="text" name="firstName" id="inputFirstName" placeholder="Your first name"
+                                        ng-model="signup.firstName" required ng-trim="true">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="inputLastName">First name</label>
+                                <div class="controls">
+                                    <input type="text" name="lastName" id="inputLastName" placeholder="Your last name"
+                                        ng-model="signup.lastName" required ng-trim="true">
+                                </div>
+                            </div>
+                            <div class="control-group">
                                 <label class="control-label" for="inputUsername">Username</label>
                                 <div class="controls">
-                                    <input type="text" name="username" id="inputUsername" placeholder="Your Username" 
+                                    <input type="text" name="username" id="inputUsername" placeholder="Your username" 
                                         ng-model="signup.username" required ng-trim="true">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputPassword">Password</label>
                                 <div class="controls">
-                                    <input type="password" name="password" id="inputPassword" placeholder="Password"
+                                    <input type="password" name="password" id="inputPassword" placeholder="Your password"
                                         required ng-model="signup.password">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="confirmation">Password confirmation</label>
                                 <div class="controls">
-                                    <input type="password" id="confirmation" placeholder="Password"
+                                    <input type="password" id="confirmation" placeholder="Confirmed password"
                                         required ng-model="signup.confirmation">
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="notice">Notice</label>
-                                <div class="controls">
-                                    <textarea id="notice" placeholder="Enter information about yourself" 
-                                        ng-model="signup.info" ngMaxlength="100" ng-trim="true"></textarea>
                                 </div>
                             </div>
                             <div class="control-group">
