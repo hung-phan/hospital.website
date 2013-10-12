@@ -1,30 +1,57 @@
 define([
-    'angular', 
+    'angular',
+    'jquery',
+    'alertify',
     'services'
-], function(angular) {
+], function(angular, $, alertify) {
     'use strict';
 
     /* Controllers */
-    
+
     return angular.module('hospitalControllers', [
         'hospitalServices'
-    ]).controller('PhoneListCtrl', [
-        '$scope', 
-        'Phone', 
-        function($scope, Phone) {
-           $scope.phones = Phone.query();
-           $scope.orderProp = 'age';
-    }]).controller('PhoneDetailCtrl', [
-        '$scope', 
-        '$routeParams', 
-        'Phone', 
-        function($scope, $routeParams, Phone) {
-            $scope.phone = Phone.get({phoneId: $routeParams.phoneId}, function(phone) {
-                $scope.mainImageUrl = phone.images[0];
-            });
+    ]).controller('Login', [
+        '$scope',
+        '$route',
+        'LoginService', 
+        function($scope, $route, LoginService) {
 
-            $scope.setImage = function(imageUrl) {
-                $scope.mainImageUrl = imageUrl;
+        }
+    ]).controller('CreateAccount', [
+        '$scope', 
+        '$route', 
+        function($scope, $route) {
+            
+            //initialize
+            $scope.signup = {
+                username : '',
+                password : '',
+                confirmation : '',
+                info : '',
+                error : false,
+                passwordIdentical : true,
+                usernameExist : false
+            };
+
+            /* create account with username and password */
+            $scope.createAccount = function() {
+                (function() {
+                    /* validation */ 
+                    $scope.signup.passwordIdentical = $scope.signup.password == $scope.signup.confirmation;
+                    // implement server later
+                    $scope.signup.usernameExist = false;
+                    $scope.signup.error = !$scope.signup.passwordIdentical || $scope.signup.usernameExist;
+                }());
+                if (!$scope.signup.error) {
+                    /* insert account into the server database */
+                    var signup = {
+                        username : $scope.signup.username,
+                        password : $scope.signup.password,
+                        info : $scope.signup.info,
+                    }
+                    alertify.log('Account sucessfully created');
+                }
             }
-    }]);
+        }
+    ]);
 });

@@ -3,11 +3,13 @@ requirejs.config({
         'angular' : 'vendor/angular.min',
         'angular_resource' : 'vendor/angular-resource.min',
         'bootstrap' : 'vendor/bootstrap.min',
-        'jquery' : 'vendor/jquery.min'
+        'jquery' : 'vendor/jquery.min',
+        'alertify' : 'vendor/alertify.min'
     }, shim: {
         'angular' : { exports : 'angular' }, 
         'angular_resource' : ['angular'], 
-        'bootstrap' : ['jquery'], 
+        'bootstrap' : ['jquery'],
+        'alertify' : { exports : 'alertify' },
         'controllers' : ['angular', 'services'],
         'filters' : ['angular'],
         'services' : ['angular']
@@ -36,15 +38,15 @@ define([
                 'hospitalServices'
             ]).config(['$routeProvider', function($routeProvider) {
                 $routeProvider.
-                    when('/phones', {
-                        templateUrl: 'partials/phone-list.html', 
-                        controller: 'PhoneListCtrl'
+                    when('/login', {
+                        templateUrl: 'partials/login.html', 
+                        controller: 'Login'
                     }).
-                    when('/phones/:phoneId', {
-                        templateUrl: 'partials/phone-detail.html', 
-                        controller: 'PhoneDetailCtrl'
+                    when('/create-account', {
+                        templateUrl: 'partials/create-account.html', 
+                        controller: 'CreateAccount'
                     }).
-                   otherwise({redirectTo: '/phones'});
+                    otherwise({redirectTo: '/login'});
         }]);
         // bootstrap model
         angular.bootstrap($html, ['hospitalApp']);

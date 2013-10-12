@@ -3,7 +3,7 @@ define(['angular'], function(angular) {
     /* Services */
 
     angular.module('hospitalServices', ['ngResource']).
-        factory('Phone', function($resource){
+        factory('LoginService', function($resource){
       return $resource('phones/:phoneId.json', {}, {
         query: {method:'GET', params:{phoneId:'phones'}, isArray:true}
       });
