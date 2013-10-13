@@ -10,24 +10,26 @@
             <div class="tab-pane fade active in" id="login">
                 <div class="row-fluid">
                     <div class="span8 well login-form">
-                        <form class="form-horizontal" method="post">
+                        <form name="loginForm" class="form-horizontal" ng-submit="login()">
                             <legend>Login</legend>
                             <div class="control-group">
                                 <label class="control-label" for="inputUsername">Username</label>
                                 <div class="controls">
-                                    <input type="text" id="inputUsername" placeholder="Your Username">
+                                    <input type="text" id="inputUsername" placeholder="Your Username"
+                                        ng-model="signin.username" required ng-trim="true">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputPassword">Password</label>
                                 <div class="controls">
-                                    <input type="password" id="inputPassword" placeholder="Password">
+                                    <input type="password" id="inputPassword" placeholder="Password"
+                                        ng-model="signin.password" required>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <div class="controls">
                                     <label class="checkbox">
-                                        <input type="checkbox"> Remember me
+                                        <input type="checkbox" ng-model="signin.remember"> Remember me
                                     </label>
                                     <button type="submit" class="btn btn-success">Sign in</button>
                                 </div>
@@ -37,7 +39,7 @@
                     <div class="span4 login-form">
                         <div class="center-wrapper">
                             <div class="center-child">
-                                <img src="http://dummyimage.com/300x300&text=Your Mom Goes to College" alt="Image" />
+                                <img src="http://dummyimage.com/300x300&text=YOLO" alt="Image" />
                             </div> 
                         </div>
                     </div>
