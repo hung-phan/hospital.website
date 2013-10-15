@@ -37,7 +37,7 @@ define([
                 'hospitalControllers', 
                 'hospitalFilters', 
                 'hospitalServices'
-            ]).config(['$routeProvider', function($routeProvider) {
+            ]).config(['$routeProvider', '$interpolateProvider', function($routeProvider, $interpolateProvider) {
                 $routeProvider.
                     when('/login', {
                         templateUrl: 'partials/login.html', 
@@ -51,7 +51,10 @@ define([
                         templateUrl: 'partials/home.html',
                         controller: 'Home'
                     }).
-                    otherwise({redirectTo: '/login'});
+                    otherwise({redirectTo: '/home'});
+                /* change configure to use [[ to be the interpolation */
+                $interpolateProvider.startSymbol('[[');
+                $interpolateProvider.endSymbol(']]');
         }]);
         // bootstrap model
         angular.bootstrap($html, ['hospitalApp']);

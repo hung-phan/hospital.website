@@ -1,3 +1,7 @@
 .login-form {
     height: 400px;
 }
+
+a:hover {
+	cursor:pointer;
+}
