@@ -13,7 +13,8 @@ requirejs.config({
         'alertify' : { exports : 'alertify' },
         'controllers' : ['angular', 'services'],
         'filters' : ['angular'],
-        'services' : ['angular']
+        'services' : ['angular'],
+        'directives' : ['angular']
     }
 });
 
@@ -25,7 +26,8 @@ define([
     'jquery',
     'controllers',
     'filters',
-    'services'
+    'services',
+    'directives'
 ], function(angular, angular_resource, $) {
     'use strict';
 
@@ -36,7 +38,8 @@ define([
         angular.module('hospitalApp', [
                 'hospitalControllers', 
                 'hospitalFilters', 
-                'hospitalServices'
+                'hospitalServices',
+                'hospitalDirectives'
             ]).config(['$routeProvider', '$interpolateProvider', function($routeProvider, $interpolateProvider) {
                 $routeProvider.
                     when('/login', {

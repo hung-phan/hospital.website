@@ -2,14 +2,15 @@ define([
     'angular',
     'jquery',
     'alertify',
+    'bootstrap',
     'functional',
     'services'
-], function(angular, $, alertify, func) {
+], function(angular, $, alertify, bootstrap, func) {
     'use strict';
 
     /* Controllers */
 
-    return angular.module('hospitalControllers', [
+    angular.module('hospitalControllers', [
         'hospitalServices'
     ]).controller('Login', [
         '$scope',
@@ -106,39 +107,136 @@ define([
     ]).controller('DoctorController', [
         '$scope',
         '$location',
-        function($scope, $location) {
+        'WebSocketService',
+        function($scope, $location, socket) {
             /* init */
-            $scope.doctors = [
-                { 
-                    id : 1, 
-                    name : 'Phan Quang Hung', 
-                    address : 'Bui Dinh Tuy', 
-                    phone_number : '0908 287 253', 
-                    working_hour : '6 am to 4 pm', 
-                    specialist : 'Surgery', 
-                    notice : 'This is notice'
-                }, { 
-                    id : 2, 
-                    name : 'Phan Minh Dang', 
-                    address : 'Bui Dinh Tuy', 
-                    phone_number : '0908 287 253', 
-                    working_hour : '6 am to 4 pm', 
-                    specialist : 'Beast', 
-                    notice : 'This is notice'
-                }, { 
-                    id : 3, 
-                    name : 'Tran Ngoc Nghi', 
-                    address : 'Bui Dinh Tuy', 
-                    phone_number : '0908 287 253', 
-                    working_hour : '6 am to 4 pm', 
-                    specialist : 'Beauty', 
-                    notice : 'This is notice'
+            $scope.doctors = [];
+            $scope.new = {
+                name : '', 
+                address : '', 
+                phone_number : '', 
+                working_hour : '', 
+                specialist : '', 
+                notice : '',
+                reset : function() {
+                    for (var prop in this) {
+                        if (this.hasOwnProperty(prop) && 
+                            typeof this[prop] != 'function') {
+                            this[prop] = '';
+                        }
+                    }
                 }
-            ];
-            $scope.test = 'test';
-            
-            $scope.edit = function(text) {
-                $scope.test = text;
+            };
+            $scope.current = {
+                id : -1, 
+                name : '', 
+                address : '', 
+                phone_number : '', 
+                working_hour : '', 
+                specialist : '', 
+                notice : ''
+            };
+
+            /* init web socket */
+            socket.registerCallBack(function(e) {
+                var data = JSON.parse(e);
+                console.log(data);
+                if (data.type == 'doctor_handler') {
+                    switch(data.method) {
+                        case 'query':
+                            $scope.doctors = data.elements;
+                            break;
+                        case 'create':
+                            $scope.doctors.push(data.elements);
+                            break;
+                        case 'update':
+                            (function(){
+                                var doctor = $scope.doctors.filter(function(o) { 
+                                    return o.id == data.elements[0].id
+                                })[0];
+                                if (doctor) {
+                                    func.simpleExtend(doctor, data.elements[0]);
+                                }    
+                            }());
+                            break;
+                        case 'filter':
+                            $scope.doctors = data.elements;                            
+                            break;
+                        case 'delete':
+                            (function(){
+                                var index = func.findIndexByKeyValue(
+                                    $scope.doctors, 'id', data.elements[0].id
+                                );
+                                $scope.doctors.splice(index, 1);
+                            }());
+                            break;
+                    }
+                }
+            });
+
+            socket.send({
+                type : 'doctor_handler',
+                method : 'query'
+            });
+
+            $scope.toggleEdit = function(doctorID) {
+                func.simpleExtend($scope.current, 
+                    $scope.doctors.filter(function(o) { return o.id == doctorID; })[0]);
+                $('#edit-modal').modal('toggle');
+            };
+
+            $scope.toggleCreate = function() {
+                $scope.new.reset();
+                $('#create-modal').modal('toggle');
+            };
+
+            $scope.create = function() {
+                socket.send({
+                    type : 'doctor_handler',
+                    method : 'create',
+                    elements : [
+                        {
+                            name : $scope.new.name, 
+                            address : $scope.new.address, 
+                            phone_number : $scope.new.phone_number, 
+                            working_hour : $scope.new.working_hour, 
+                            specialist : $scope.new.specialist, 
+                            notice : $scope.new.notice
+                        }
+                    ]
+                });
+                $('#create-modal').modal('toggle');
+            };
+
+            $scope.update = function(doctorID) {
+                if (!func.simpleCompare(
+                    $scope.current, 
+                    $scope.doctors.filter(function(o) { return o.id == doctorID; })[0])
+                ) {
+                    socket.send({
+                        type : 'doctor_handler',
+                        method : 'update',
+                        elements : [$scope.current]
+                    });
+                }
+                $('#edit-modal').modal('toggle');
+            }
+
+            $scope.delete = function(doctorID) {
+                /* confirm dialog */
+                alertify.confirm("Delete this row ?", function(ok) {
+                    if (ok) {
+                        socket.send({
+                            type : 'doctor_handler',
+                            method : 'delete',
+                            elements : [
+                                {
+                                    id : doctorID
+                                }
+                            ]
+                        });
+                    }
+                });
             };
         }
     ]);
