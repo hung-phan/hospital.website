@@ -95,7 +95,8 @@ define([
     ]).controller('Home', [
         '$scope',
         '$location',
-        function($scope, $location) {
+        'WebSocketService',
+        function($scope, $location, socket) {
             /* create shared template */
             $scope.sharedTemplate = {
                 url : 'partials/main.html'
@@ -111,6 +112,7 @@ define([
         function($scope, $location, socket) {
             /* init */
             $scope.doctors = [];
+            $scope.query = '';
             $scope.new = {
                 name : '', 
                 address : '', 
@@ -140,14 +142,13 @@ define([
             /* init web socket */
             socket.registerCallBack(function(e) {
                 var data = JSON.parse(e);
-                console.log(data);
                 if (data.type == 'doctor_handler') {
                     switch(data.method) {
                         case 'query':
                             $scope.doctors = data.elements;
                             break;
                         case 'create':
-                            $scope.doctors.push(data.elements);
+                            $scope.doctors.push(data.elements[0]);
                             break;
                         case 'update':
                             (function(){
@@ -172,6 +173,7 @@ define([
                             break;
                     }
                 }
+                $scope.$apply();
             });
 
             socket.send({
@@ -238,6 +240,14 @@ define([
                     }
                 });
             };
+
+            $scope.filter =function() {
+                socket.send({
+                    type : 'doctor_handler',
+                    method : 'filter',
+                    keyword : $scope.query
+                });
+            }
         }
     ]);
 });
