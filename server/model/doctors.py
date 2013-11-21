@@ -21,12 +21,16 @@ class Doctor:
         """Query all doctors"""
         elements = db_.get_data_from('{0}, {1}'.format(
             'id', ', '.join(self.args_list)), 
-            'doctor_table', '1=1')
+            'doctor_table', '1=1 order by id desc \
+                limit {0}, {1}'.format(
+                    (data['page'] - 1) * data['max'],
+                    data['max']))
         # return message
         msg = dict()
         
         msg['type'] = 'doctor_handler'
         msg['method'] = 'query'
+        msg['noElements'] = db_.get_no_of_elements('doctor_table')
 
         msg['elements'] = list()
         if elements is not None:
@@ -104,15 +108,26 @@ class Doctor:
 
     def filter(self, db_, data):
         """Filter data by keyword"""
+        filter_condition = sql_method.filter_value(
+            self.args_list, 
+            data['keyword'])
         elements = db_.get_data_from('{0}, {1}'.format(
             'id', ', '.join(self.args_list)), 'doctor_table', 
-            sql_method.filter_value(self.args_list, data['keyword']))
+            filter_condition + ' order by id desc \
+                limit {0}, {1}'.format(
+                    (data['page'] - 1) * data['max'],
+                    data['max'])
+                )
 
         # return message
         msg = dict()
         
         msg['type'] = 'doctor_handler'
         msg['method'] = 'filter'
+        msg['noElements'] = db_.get_no_of_elements_filter(
+            'doctor_table', 
+            filter_condition    
+        )
 
         msg['elements'] = list()
         if elements is not None:

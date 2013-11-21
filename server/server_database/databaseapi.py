@@ -73,9 +73,21 @@ class Database:
                 salt, password) else False
         else:
             return False
+
     def get_last_insert_id(self, table):
         """Return last insert id"""
         self.cursor.execute("select max(id) from {0}".format(table))
+        return self.cursor.fetchone()[0]
+
+    def get_no_of_elements(self, table):
+        """Return the number of record in specific table"""
+        self.cursor.execute("select count(id) from {0}".format(table))
+        return self.cursor.fetchone()[0]
+
+    def get_no_of_elements_filter(self, table, condition):
+        """Return the number of record in specific table"""
+        self.cursor.execute("select count(id) from {0} \
+            where {1}".format(table, condition))
         return self.cursor.fetchone()[0]
 
     def get_data_from(self, what, table, where):

@@ -2,6 +2,21 @@
     height: 400px;
 }
 
+.margin-login-button {
+	margin-top: 10px;
+}
+
+.well-padding {
+	padding: 19px;
+}
+.black-color {
+	color: #000000;
+}
+
+.negative-margin-left {
+	margin-left: -15px;
+}
+
 a:hover {
 	cursor:pointer;
 }

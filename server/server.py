@@ -102,6 +102,8 @@ def main():
             {"path" : os.path.join(CLIENT_DIR, "css")},),
         (r"/img/(.*)", tornado.web.StaticFileHandler, \
             {"path" : os.path.join(CLIENT_DIR, "img")},),
+        (r"/fonts/(.*)", tornado.web.StaticFileHandler, \
+            {"path" : os.path.join(CLIENT_DIR, "fonts")},),
     ])
     port = 12345
     print('server start at port {0}'.format(port))

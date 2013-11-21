@@ -3,6 +3,7 @@
 
 from observer_pattern import Observable
 from model.doctors import Doctor
+from model.patients import Patient
 
 class GlobalHandler(Observable):
     """GlobalHandler class"""
@@ -14,6 +15,7 @@ class GlobalHandler(Observable):
 
         # create handler
         doctor_handler = Doctor()
+        patient_handler = Patient()
 
         # switch statement
         self.switch = {
@@ -23,7 +25,14 @@ class GlobalHandler(Observable):
         		'update' : doctor_handler.update,
         		'filter' : doctor_handler.filter,
         		'delete' : doctor_handler.delete
-        	}
+        	}, 
+            'patient_handler' : {
+                'query' : patient_handler.query,
+                'create' : patient_handler.create,
+                'update' : patient_handler.update,
+                'filter' : patient_handler.filter,
+                'delete' : patient_handler.delete
+            }
         }
 
     def handle(self, msg):
