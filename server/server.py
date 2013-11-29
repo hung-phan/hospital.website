@@ -105,8 +105,10 @@ def main():
         (r"/fonts/(.*)", tornado.web.StaticFileHandler, \
             {"path" : os.path.join(CLIENT_DIR, "fonts")},),
     ])
+
     port = 12345
     print('server start at port {0}'.format(port))
+    
     # start server
     application.listen(port)
     tornado.ioloop.IOLoop.instance().start()

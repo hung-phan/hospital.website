@@ -47,7 +47,7 @@
 	<paggie elements="noElements" callback="toPage(page)"></paggie>
 	<!-- Edit Modal -->
     <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Edit" aria-hidden="true">
-    	<form class="form-horizontal">
+    	<form class="form-horizontal" ng-submit="update(current.id)">
     		<div class="modal-dialog">
     			<div class="modal-content">
 				    <div class="modal-header">
@@ -64,7 +64,7 @@
 				    </div>
 				    <div class="modal-footer">
 					    <a class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</a>
-					    <a class="btn btn-primary" ng-click="update(current.id)">Save changes</a>
+					    <button type="submit" class="btn btn-primary">Save changes</button>
 				    </div>
     			</div>
     		</div>
@@ -72,7 +72,7 @@
     </div>
     <!-- Create Modal -->
     <div id="create-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Create" aria-hidden="true">
-    	<form class="form-horizontal">
+    	<form class="form-horizontal" ng-submit="create()">
     		<div class="modal-dialog">
     			<div class="modal-content">
 				    <div class="modal-header">
@@ -89,7 +89,7 @@
 				    </div>
 				    <div class="modal-footer">
 					    <a class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</a>
-					    <a class="btn btn-primary" ng-click="create()">Save changes</a>
+					    <button type="submit" class="btn btn-primary">Save changes</button>
 				    </div>
     			</div>
     		</div>

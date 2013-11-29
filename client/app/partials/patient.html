@@ -45,7 +45,7 @@
 	<paggie elements="noElements" callback="toPage(page)"></paggie>
 	<!-- Edit Modal -->
     <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Edit" aria-hidden="true">
-    	<form class="form-horizontal">
+    	<form class="form-horizontal" ng-submit="update(current.id)">
     		<div class="modal-dialog">
     			<div class="modal-content">
 				    <div class="modal-header">
@@ -54,14 +54,14 @@
 				    </div>
 				    <div class="modal-body">
 						<zippy label="Name" value="current.name"></zippy>
-						<zippy label="Age" value="current.age"></zippy>
+						<zippy-number label="Age" value="current.age"></zippy-number>
 						<zippy label="Gender" value="current.gender"></zippy>
 						<zippy label="Address" value="current.address"></zippy>
 						<zippy label="Phone number" value="current.phone_number"></zippy>
 				    </div>
 				    <div class="modal-footer">
 					    <a class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</a>
-					    <a class="btn btn-primary" ng-click="update(current.id)">Save changes</a>
+					    <button type="submit" class="btn btn-primary">Save changes</button>
 				    </div>
     			</div>
     		</div>
@@ -69,7 +69,7 @@
     </div>
     <!-- Create Modal -->
     <div id="create-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Create" aria-hidden="true">
-    	<form class="form-horizontal">
+    	<form class="form-horizontal" ng-submit="create()">
     		<div class="modal-dialog">
     			<div class="modal-content">
 				    <div class="modal-header">
@@ -78,14 +78,14 @@
 				    </div>
 				    <div class="modal-body">
 						<zippy label="Name" value="new.name"></zippy>
-						<zippy label="Age" value="new.age"></zippy>
-						<zippy label="Gender" value="new.gender"></zippy>
+						<zippy-number label="Age" value="new.age"></zippy-number>
+						<selectie label="Gender" value="new.gender"></selectie>
 						<zippy label="Address" value="new.address"></zippy>
 						<zippy label="Phone number" value="new.phone_number"></zippy>
 				    </div>
 				    <div class="modal-footer">
 					    <a class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</a>
-					    <a class="btn btn-primary" ng-click="create()">Save changes</a>
+					    <button type="submit" class="btn btn-primary">Save changes</button>
 				    </div>
     			</div>
     		</div>

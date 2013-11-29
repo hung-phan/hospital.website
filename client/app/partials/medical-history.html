@@ -1,1 +1,268 @@
-medical-history.html
+<div ng-controller="MedicalHistoryController">
+	<form class="form-horizontal" ng-show="create.toggle">
+		<legend>Create form</legend>
+		<!-- Visit Date -->
+		<div class="form-group">
+		    <label class="col-md-3 control-label">Date</label>
+		    <div class="col-md-9">
+				<div class="input-group date">
+					<input class="datepicker form-control" ng-model="create.visitDate" data-date-format="dd/mm/yyyy" name="datepicker" placeholder="Enter visit date"/>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+				</div>
+		    </div>
+		</div>
+		<!-- Patient Name -->
+		<div class="form-group">
+		    <label class="col-md-3 control-label">Patient Name</label>
+		    <div class="col-md-9">
+				<input type="text" class="form-control" 
+					ng-change="patientOnEdit(patients, create.patientName)" 
+					ng-model="create.patientName"
+					typeahead-on-select="typeaheadOnSelect(create, 'patientID', $item)"
+					typeahead-editable="false"
+					typeahead="patient.name for patient in patients | filter:$viewValue"
+					placeholder="Enter patient name">
+		    </div>
+		</div>
+		<!-- Prescribe by -->
+		<div class="form-group">
+			<label class="col-md-3 control-label">Prescribed by</label>
+		    <div class="col-md-9">
+				<input type="text" class="form-control" 
+					ng-change="doctorOnEdit(doctors, create.prescriptions.doctorName)" 
+					ng-model="create.prescriptions.doctorName"
+					typeahead-on-select="typeaheadOnSelect(create.prescriptions, 'doctorID', $item)"
+					typeahead-editable="false"
+					typeahead="doctor.name for doctor in doctors | filter:$viewValue"
+					placeholder="Enter doctor name">
+		    </div>
+		</div>
+		<!-- Prescriptions -->
+		<div class="form-group" ng-show="create.prescriptions.data.length != 0">
+			<div class="col-md-9 col-md-offset-3">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Drug name</th>
+							<th>Quantity</th>
+							<th>Dose</th>
+							<th>Notice</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="prescription in create.prescriptions.data">
+							<td>[[prescription.id]]</td>
+							<td>[[prescription.drugID]]</td>
+							<td>[[prescription.quantity]]</td>
+							<td>[[prescription.dose]]</td>
+							<td>[[prescription.notice]]</td>
+							<td>
+								<ul class="list-inline">
+									<li><a class="black-color">
+										<span class="glyphicon glyphicon-pencil"></span>
+									</a></li>
+									<li><a class="black-color">
+										<span class="glyphicon glyphicon-remove"></span>
+									</a></li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+		    </div>
+		</div>
+		<!-- Enter Prescription -->
+		<div class="form-group">
+		    <div class="col-md-9 col-md-offset-3">
+		    	<table class="table" ng-show="create.prescriptions.new.show">
+					<thead>
+						<tr>
+							<th>Drug name</th>
+							<th>Quantity</th>
+							<th>Dose</th>
+							<th>Notice</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<input type="text" class="form-control" 
+									ng-change="drugOnEdit(drugs, create.prescriptions.new.drugName)" 
+									ng-model="create.prescriptions.new.drugName"
+									typeahead-on-select="typeaheadOnSelect(create.prescriptions.new, 'drugID', $item)"
+									typeahead-editable="false"
+									typeahead="drug.name for drug in drugs | filter:$viewValue"
+									placeholder="Enter drug name">
+							</td>
+							<td>
+								<input type="text" ng-model="create.prescriptions.new.quantity" class="form-control" placeholder="Quantity">
+							</td>
+							<td>
+								<input type="text" ng-model="create.prescriptions.new.dose" class="form-control" placeholder="Dose">
+							</td>
+							<td>
+								<input type="text" ng-model="create.prescriptions.new.notice" class="form-control" placeholder="Notice">
+							</td>
+							<td>
+								<ul class="list-inline">
+									<button type="button" class="btn btn-warning" ng-click="input(create.prescriptions)">
+										<span class="glyphicon glyphicon-ok"></span>
+									</button>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<button type="button" class="btn btn-success" ng-click="enter(create.prescriptions.new)">
+					<span ng-class="{'glyphicon glyphicon-plus': !create.prescriptions.new.show, 'glyphicon glyphicon-minus': create.prescriptions.new.show}"></span>
+				</button>
+		    </div>
+		</div>
+		<!-- Lab Order by -->
+		<div class="form-group">
+			<label class="col-md-3 control-label">Lab Order by</label>
+		    <div class="col-md-9">
+				<input type="text" class="form-control" 
+					ng-change="doctorOnEdit(doctors, create.labOrders.doctorName)" 
+					ng-model="create.labOrders.doctorName"
+					typeahead-on-select="typeaheadOnSelect(create.labOrders, 'doctorID', $item)"
+					typeahead-editable="false"
+					typeahead="doctor.name for doctor in doctors | filter:$viewValue">
+		    </div>
+		</div>
+		<!-- Lab Orders -->
+		<div class="form-group" ng-show="create.labOrders.data.length != 0">
+			<div class="col-md-9 col-md-offset-3">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Result</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="labOrder in create.labOrders.data">
+							<td>[[labOrder.result]]</td>
+							<td>
+								<ul class="list-inline">
+									<li><a class="black-color">
+										<span class="glyphicon glyphicon-pencil"></span>
+									</a></li>
+									<li><a class="black-color">
+										<span class="glyphicon glyphicon-remove"></span>
+									</a></li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+		    </div>
+		</div>
+		<!-- Enter Lab Order -->
+		<div class="form-group">
+		    <div class="col-md-9 col-md-offset-3">
+		    	<table class="table" ng-show="create.labOrders.new.show">
+					<thead>
+						<tr>
+							<th>Result</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<input type="text" ng-model="create.labOrders.new.result" class="form-control" placeholder="Result">
+							</td>
+							<td>
+								<ul class="list-inline">
+									<button type="button" class="btn btn-warning">
+										<span class="glyphicon glyphicon-ok"></span>
+									</button>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<button type="button" class="btn btn-success">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+		    </div>
+		</div>
+		<!-- Service type -->
+		<div class="form-group">
+		    <label class="col-md-3 control-label">Service type</label>
+		    <div class="col-md-9">
+				<input type="text" class="form-control" ng-model="create.services.type" ng-trim="true">
+		    </div>
+		</div>
+		<!-- Services -->
+		<div class="form-group" ng-show="create.services.data.length != 0">
+			<div class="col-md-9 col-md-offset-3">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Medical Service</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="service in create.services.data">
+							<td>[[service.id]]</td>
+							<td>[[service.name]]</td>
+							<td>
+								<ul class="list-inline">
+									<li><a class="black-color">
+										<span class="glyphicon glyphicon-pencil"></span>
+									</a></li>
+									<li><a class="black-color">
+										<span class="glyphicon glyphicon-remove"></span>
+									</a></li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+		    </div>
+		</div>
+		<!-- Enter Service -->
+		<div class="form-group">
+		    <div class="col-md-9 col-md-offset-3">
+		    	<table class="table" ng-show="create.services.new.show">
+					<thead>
+						<tr>
+							<th>Service name</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<input type="text" class="form-control" 
+									ng-change="medicalServiceOnEdit(medicalServices, create.labOrders.medicalServiceName)" 
+									ng-model="create.services.new.medicalServiceName"
+									typeahead-on-select="typeaheadOnSelect(create.services.new, 'medicalServiceID', $item)"
+									typeahead-editable="false"
+									typeahead="medicalService.name for medicalService in medicalServices | filter:$viewValue">
+							</td>
+							<td>
+								<ul class="list-inline">
+									<button type="button" class="btn btn-warning">
+										<span class="glyphicon glyphicon-ok"></span>
+									</button>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<button type="button" class="btn btn-success">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+		    </div>
+		</div>
+	</form>
+</div>

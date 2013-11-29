@@ -16,6 +16,32 @@ define(['angular'], function(angular) {
 	    	};
 		}
 	])
+	.directive('zippyNumber', [
+		function() {
+	    	return {
+	    		restrict : 'E',
+	    		replace : true,
+	    		templateUrl : 'partials/zippy-number.html',
+	    		scope : { 
+	    			label : "@",
+	    			value : "="
+	    		}
+	    	};
+		}
+	])
+	.directive('selectie', [
+		function() {
+	    	return {
+	    		restrict : 'E',
+	    		replace : true,
+	    		templateUrl : 'partials/selectie.html',
+	    		scope : { 
+	    			label : "@",
+	    			value : "="
+	    		}
+	    	};
+		}
+	])
 	.directive('paggie', [
 		'$parse', 
 		function($parse) {

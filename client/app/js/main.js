@@ -1,16 +1,20 @@
 requirejs.config({
     paths: {
         'angular' : 'vendor/angular.min',
-        'angular_resource' : 'vendor/angular-resource.min',
+        'angular-resource' : 'vendor/angular-resource.min',
         'bootstrap' : 'vendor/bootstrap.min',
         'jquery' : 'vendor/jquery.min',
         'alertify' : 'vendor/alertify.min',
-        'functional' : 'vendor/functional'
+        'functional' : 'vendor/functional',
+        'ui-bootstrap' : 'vendor/ui-bootstrap.min',
+        'datepicker' : 'vendor/bootstrap-datepicker.min'
     }, shim: {
         'angular' : { exports : 'angular' }, 
-        'angular_resource' : ['angular'], 
-        'bootstrap' : ['jquery'],
+        'angular-resource' : ['angular'], 
         'alertify' : { exports : 'alertify' },
+        'bootstrap' : ['jquery'],
+        'ui-bootstrap' : ['angular', 'angular-resource'],
+        'datepicker' : ['bootstrap', 'jquery'],
         'controllers' : ['angular', 'services'],
         'filters' : ['angular'],
         'services' : ['angular'],
@@ -22,8 +26,10 @@ Window.name = "NG_DEFER_BOOTSTRAP!";
 
 define([
     'angular', 
-    'angular_resource',
+    'angular-resource',
     'jquery',
+    'datepicker',
+    'ui-bootstrap',
     'controllers',
     'filters',
     'services',
@@ -36,6 +42,7 @@ define([
         // smart works go here
         var $html = $('html');
         angular.module('hospitalApp', [
+                'ui.bootstrap',
                 'hospitalControllers', 
                 'hospitalFilters', 
                 'hospitalServices',

@@ -1,1 +1,82 @@
-medical-service.html
+<div ng-controller="MedicalServiceController">
+	<div class="row">
+		<div class="form-group col-md-6">
+			<input type="text" class="form-control negative-margin-left" ng-model="query" ng-change="filter()" placeholder="Search ...">
+		</div>
+		<div class="col-md-6 text-right">
+			<a class="btn btn-large btn-success" ng-click="toggleCreate()">Create</a>
+		</div>
+	</div>
+	<div class="row">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Price</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="medicalService in medicalServices" ng-dblclick="toggleEdit(medicalService.id)">
+					<td>[[medicalService.id]]</td>
+					<td>[[medicalService.name]]</td>
+					<td>[[medicalService.price | numberFilter]]</td>
+					<td>
+						<ul class="list-inline">
+							<li><a class="black-color" ng-click="toggleEdit(medicalService.id)">
+								<span class="glyphicon glyphicon-pencil"></span>
+							</a></li>
+							<li><a class="black-color" ng-click="delete(medicalService.id)">
+								<span class="glyphicon glyphicon-remove"></span>
+							</a></li>
+						</ul>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<paggie elements="noElements" callback="toPage(page)"></paggie>
+	<!-- Edit Modal -->
+    <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Edit" aria-hidden="true">
+    	<form class="form-horizontal" ng-submit="update(current.id)">
+    		<div class="modal-dialog">
+    			<div class="modal-content">
+				    <div class="modal-header">
+					    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					    <h3>Edit information</h3>
+				    </div>
+				    <div class="modal-body">
+						<zippy label="Name" value="current.name"></zippy>
+						<zippy-number label="Price" value="current.price"></zippy>
+				    </div>
+				    <div class="modal-footer">
+					    <a class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</a>
+					    <button type="submit" class="btn btn-primary">Save changes</button>
+				    </div>
+    			</div>
+    		</div>
+        </form>
+    </div>
+    <!-- Create Modal -->
+    <div id="create-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Create" aria-hidden="true">
+    	<form class="form-horizontal" ng-submit="create()">
+    		<div class="modal-dialog">
+    			<div class="modal-content">
+				    <div class="modal-header">
+					    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					    <h3>Create information</h3>
+				    </div>
+				    <div class="modal-body">
+						<zippy label="Name" value="new.name"></zippy>
+						<zippy-number label="Price" value="new.price"></zippy-number>
+				    </div>
+				    <div class="modal-footer">
+					    <a class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</a>
+					    <button type="submit" class="btn btn-primary">Save changes</button>
+				    </div>
+    			</div>
+    		</div>
+        </form>
+    </div>
+</div>
