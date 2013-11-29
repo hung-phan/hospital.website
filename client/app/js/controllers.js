@@ -980,27 +980,29 @@ define([
                 }
             };
 
-            $scope.patients = [
-                { id : 1, name : 'Phan Minh Dang' },
-                { id : 2, name : 'Phan Quang Hung' },
-                { id : 3, name : 'Tran Ngoc Nghi' }
-            ];
+            $scope.patients = [ { id : 1, name : 'Phan Minh Dang' }, { id : 2, name : 'Phan Quang Hung' }, { id : 3, name : 'Tran Ngoc Nghi' }];
             $scope.doctors = [{ id : 1, name : 'Phan Quang Hung' }];
             $scope.drugs = [{ id : 1, name : 'Paradon' }];
             $scope.medicalServices = [{ id : 1, name : 'Tam rua' }];
 
+            /* autocomplete function */
             $scope.enter = function(dataObject) {
                 dataObject.reset();
                 dataObject.toggleShow();
             };
 
             $scope.input = function(dataObject) {
-                dataObject.data.push(returnObject(dataObject.new, 'string'));
+                /* make edit mode for object */
+                var object = returnObject(dataObject.new, 'string');
+                object.editMode = false;
+
+                /* push the object into data */
+                dataObject.data.push(object);
                 $scope.enter(dataObject.new);
             };
 
             $scope.typeaheadOnSelect = function(object, property, $item) {
-                object[property] = $item.id;
+                object[property] = $item.id.toString();
             };
 
             $scope.patientOnEdit = function(data, searchValue) {
@@ -1037,6 +1039,16 @@ define([
                 //     value : searchValue
                 // });
                 // $scope.medicalServices = medicalServicesDeferred.promise;
+            };
+
+            /* utility */
+            $scope.deleteElement = function(object, index, numberOfElement) {
+                alertify.confirm("Delete this row ?", function(ok) {
+                    if (ok) {
+                        object.splice(index, numberOfElement);
+                        $scope.$apply();
+                    }
+                });
             };
 
             /* init web socket */

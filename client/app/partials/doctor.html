@@ -11,7 +11,6 @@
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th>#</th>
 					<th>Name</th>
 					<th>Address</th>
 					<th>Phone</th>
@@ -23,7 +22,6 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="doctor in doctors" ng-dblclick="toggleEdit(doctor.id)">
-					<td>[[doctor.id]]</td>
 					<td>[[doctor.name]]</td>
 					<td>[[doctor.address]]</td>
 					<td>[[doctor.phone_number]]</td>

@@ -43,7 +43,6 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>#</th>
 							<th>Drug name</th>
 							<th>Quantity</th>
 							<th>Dose</th>
@@ -53,17 +52,45 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="prescription in create.prescriptions.data">
-							<td>[[prescription.id]]</td>
-							<td>[[prescription.drugID]]</td>
-							<td>[[prescription.quantity]]</td>
-							<td>[[prescription.dose]]</td>
-							<td>[[prescription.notice]]</td>
+							<td>
+								<span ng-hide="prescription.editMode" ng-bind="prescription.drugName"></span>
+								<input type="text" class="form-control" 
+									ng-show="prescription.editMode"
+									ng-change="drugOnEdit(drugs, prescription.drugName)" 
+									ng-model="prescription.drugName"
+									typeahead-on-select="typeaheadOnSelect(prescription, 'drugID', $item)"
+									typeahead-editable="false"
+									typeahead="drug.name for drug in drugs | filter:$viewValue"
+									placeholder="Enter drug name">
+							</td>
+							<td>
+								<inputie 
+									data="prescription.quantity" 
+									place-holder="Enter quantity" 
+									edit-mode="prescription.editMode">
+								</inputie>
+							</td>
+							<td>
+								<inputie 
+									data="prescription.dose" 
+									place-holder="Enter dose" 
+									edit-mode="prescription.editMode">
+								</inputie>
+							</td>
+							<td>
+								<inputie 
+									data="prescription.notice" 
+									place-holder="Enter notice" 
+									edit-mode="prescription.editMode">
+								</inputie>
+							</td>
 							<td>
 								<ul class="list-inline">
-									<li><a class="black-color">
+									<li><a class="black-color" ng-click="prescription.editMode = !prescription.editMode">
 										<span class="glyphicon glyphicon-pencil"></span>
 									</a></li>
-									<li><a class="black-color">
+									<li><a class="black-color" 
+										ng-click="deleteElement(create.prescriptions.data, $index, 1)">
 										<span class="glyphicon glyphicon-remove"></span>
 									</a></li>
 								</ul>
@@ -130,7 +157,8 @@
 					ng-model="create.labOrders.doctorName"
 					typeahead-on-select="typeaheadOnSelect(create.labOrders, 'doctorID', $item)"
 					typeahead-editable="false"
-					typeahead="doctor.name for doctor in doctors | filter:$viewValue">
+					typeahead="doctor.name for doctor in doctors | filter:$viewValue"
+					placeholder="Enter doctor name">
 		    </div>
 		</div>
 		<!-- Lab Orders -->
@@ -139,20 +167,26 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>#</th>
 							<th>Result</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="labOrder in create.labOrders.data">
-							<td>[[labOrder.result]]</td>
+							<td>
+								<inputie 
+									data="labOrder.result" 
+									place-holder="Enter result" 
+									edit-mode="labOrder.editMode">
+								</inputie>
+							</td>
 							<td>
 								<ul class="list-inline">
-									<li><a class="black-color">
+									<li><a class="black-color" ng-click="labOrder.editMode = !labOrder.editMode">
 										<span class="glyphicon glyphicon-pencil"></span>
 									</a></li>
-									<li><a class="black-color">
+									<li><a class="black-color" 
+										ng-click="deleteElement(create.labOrders.data, $index, 1)">
 										<span class="glyphicon glyphicon-remove"></span>
 									</a></li>
 								</ul>
@@ -179,7 +213,7 @@
 							</td>
 							<td>
 								<ul class="list-inline">
-									<button type="button" class="btn btn-warning">
+									<button type="button" class="btn btn-warning" ng-click="input(create.labOrders)">
 										<span class="glyphicon glyphicon-ok"></span>
 									</button>
 								</ul>
@@ -187,8 +221,8 @@
 						</tr>
 					</tbody>
 				</table>
-				<button type="button" class="btn btn-success">
-					<span class="glyphicon glyphicon-plus"></span>
+				<button type="button" class="btn btn-success" ng-click="enter(create.labOrders.new)">
+					<span ng-class="{'glyphicon glyphicon-plus': !create.labOrders.new.show, 'glyphicon glyphicon-minus': create.labOrders.new.show}"></span>
 				</button>
 		    </div>
 		</div>
@@ -196,7 +230,7 @@
 		<div class="form-group">
 		    <label class="col-md-3 control-label">Service type</label>
 		    <div class="col-md-9">
-				<input type="text" class="form-control" ng-model="create.services.type" ng-trim="true">
+				<input type="text" class="form-control" ng-model="create.services.type" ng-trim="true" placeholder="Enter service type">
 		    </div>
 		</div>
 		<!-- Services -->
@@ -205,21 +239,30 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>#</th>
 							<th>Medical Service</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="service in create.services.data">
-							<td>[[service.id]]</td>
-							<td>[[service.name]]</td>
+							<td>
+								<span ng-hide="service.editMode" ng-bind="service.medicalServiceName"></span>
+								<input type="text" class="form-control" 
+									ng-show="service.editMode"
+									ng-change="medicalServiceOnEdit(drugs, service.medicalServiceName)" 
+									ng-model="service.medicalServiceName"
+									typeahead-on-select="typeaheadOnSelect(service, 'medicalServiceID', $item)"
+									typeahead-editable="false"
+									typeahead="medicalService.name for medicalService in medicalServices | filter:$viewValue"
+									placeholder="Enter medical service's name">
+							</td>
 							<td>
 								<ul class="list-inline">
-									<li><a class="black-color">
+									<li><a class="black-color" ng-click="service.editMode = !service.editMode">
 										<span class="glyphicon glyphicon-pencil"></span>
 									</a></li>
-									<li><a class="black-color">
+									<li><a class="black-color" 
+										ng-click="deleteElement(create.services.data, $index, 1)">
 										<span class="glyphicon glyphicon-remove"></span>
 									</a></li>
 								</ul>
@@ -247,11 +290,12 @@
 									ng-model="create.services.new.medicalServiceName"
 									typeahead-on-select="typeaheadOnSelect(create.services.new, 'medicalServiceID', $item)"
 									typeahead-editable="false"
-									typeahead="medicalService.name for medicalService in medicalServices | filter:$viewValue">
+									typeahead="medicalService.name for medicalService in medicalServices | filter:$viewValue"
+									placeholder="Enter medical service's name">
 							</td>
 							<td>
 								<ul class="list-inline">
-									<button type="button" class="btn btn-warning">
+									<button type="button" class="btn btn-warning" ng-click="input(create.services)">
 										<span class="glyphicon glyphicon-ok"></span>
 									</button>
 								</ul>
@@ -259,8 +303,8 @@
 						</tr>
 					</tbody>
 				</table>
-				<button type="button" class="btn btn-success">
-					<span class="glyphicon glyphicon-plus"></span>
+				<button type="button" class="btn btn-success" ng-click="enter(create.services.new)">
+					<span ng-class="{'glyphicon glyphicon-plus': !create.services.new.show, 'glyphicon glyphicon-minus': create.services.new.show}"></span>
 				</button>
 		    </div>
 		</div>

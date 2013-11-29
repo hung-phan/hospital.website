@@ -65,8 +65,12 @@ class GlobalHandler(Observable):
     def handle(self, msg):
         """Handle custom message from client"""
         # print msg
-        self.simple_notify(
-        	self.switch[msg['type']][msg['method']](
-        		self.database, msg
-        	)
-        )
+        try:
+            self.simple_notify(
+                self.switch[msg['type']][msg['method']](
+                    self.database, msg
+                )
+            )
+        except Exception:
+            # fault tolerence
+            pass

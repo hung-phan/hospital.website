@@ -43,8 +43,7 @@ define(['angular'], function(angular) {
 		}
 	])
 	.directive('paggie', [
-		'$parse', 
-		function($parse) {
+		function() {
 	    	return {
 	    		restrict : 'E',
 	    		replace : true,
@@ -52,7 +51,7 @@ define(['angular'], function(angular) {
 	    		scope : {
 	    			elements : '=',
 	    			callback : '&'
-	    		}, link : function linkFunction(scope, element, attrs) {
+	    		}, link : function(scope, element, attrs) {
 	    			var MAX_ITEM_PER_PAGE = 15;
 	    			var MAX_NUMBER_OF_PAGE = 15;
 	    			
@@ -96,6 +95,22 @@ define(['angular'], function(angular) {
 	    			});
 	    		}
 	    	};
+		}
+	])
+	.directive('inputie', [
+		function() {
+			return {
+				restrict : 'E',
+	    		replace : true,
+	    		templateUrl : 'partials/inputie.html',
+	    		scope : {
+	    			data : '=',
+	    			editMode : '=',
+	    			placeHolder : '@'
+	    		}, link : function(scope, element, attrs) {
+
+	    		}
+			};
 		}
 	]);
 });

@@ -11,7 +11,6 @@
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th>#</th>
 					<th>Name</th>
 					<th>Price</th>
 					<th></th>
@@ -19,7 +18,6 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="medicalService in medicalServices" ng-dblclick="toggleEdit(medicalService.id)">
-					<td>[[medicalService.id]]</td>
 					<td>[[medicalService.name]]</td>
 					<td>[[medicalService.price | numberFilter]]</td>
 					<td>
