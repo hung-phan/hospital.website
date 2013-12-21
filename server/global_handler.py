@@ -1,12 +1,8 @@
 #!/usr/bin/python
 """Global handler"""
-
 from observer_pattern import Observable
-from model.doctors import Doctor
-from model.patients import Patient
-from model.icds import ICD
-from model.drugs import Drug
-from model.medical_services import MedicalService
+from model.model_template import ModelTemplate
+from model.medical_histories import MedicalHistory
 
 class GlobalHandler(Observable):
     """GlobalHandler class"""
@@ -17,11 +13,60 @@ class GlobalHandler(Observable):
         self.database = database_
 
         # create handler
-        doctor_handler = Doctor()
-        patient_handler = Patient()
-        icd_handler = ICD()
-        drug_handler = Drug()
-        medical_service_handler = MedicalService()
+        doctor_handler = ModelTemplate(
+            'doctor_table',
+            'doctor_handler',
+            [
+                'id',
+                'name',
+                'address',
+                'phone_number',
+                'working_hour',
+                'specialist',
+                'notice'
+            ]
+        )
+        patient_handler = ModelTemplate(
+            'patient_table',
+            'patient_handler',
+            [
+                'id',
+                'name',
+                'age',
+                'gender',
+                'address',
+                'phone_number'
+            ]
+        )
+        icd_handler = ModelTemplate(
+            'icd_table',
+            'icd_handler',
+            [
+                'id',
+                'name',
+                'code'
+            ]
+        )
+        drug_handler = ModelTemplate(
+            'drug_table',
+            'drug_handler',
+            [
+                'id',
+                'name',
+                'unit',
+                'price'
+            ]
+        )
+        medical_service_handler = ModelTemplate(
+            'medical_service_table',
+            'medical_service_handler',
+            [
+                'id',
+                'name',
+                'price'
+            ]
+        )
+        medical_history_handler = MedicalHistory()
 
         # switch statement
         self.switch = {
@@ -59,18 +104,37 @@ class GlobalHandler(Observable):
                 'update' : medical_service_handler.update,
                 'filter' : medical_service_handler.filter,
                 'delete' : medical_service_handler.delete
+            },
+            'medical_history_handler' : {
+                'query' : medical_history_handler.query,
+                'create' : medical_history_handler.create,
+                'update' : medical_history_handler.update,
+                'patient_lookup' : medical_history_handler.patient_lookup,
+                'doctor_lookup' : medical_history_handler.doctor_lookup,
+                'drug_lookup' : medical_history_handler.drug_lookup,
+                'medical_service_lookup' : medical_history_handler.medical_service_lookup,
+                'icd_lookup' : medical_history_handler.icd_lookup
             }
         }
 
-    def handle(self, msg):
+    def handle(self, connection, msg):
         """Handle custom message from client"""
-        # print msg
-        try:
-            self.simple_notify(
-                self.switch[msg['type']][msg['method']](
-                    self.database, msg
-                )
-            )
-        except Exception:
-            # fault tolerence
-            pass
+        # try:
+        return_data = self.switch[msg['type']][msg['method']](
+            self.database, msg
+        )
+        # print return_data
+        if msg['method'] in [
+            'query', 
+            'filter', 
+            'patient_lookup',
+            'doctor_lookup',
+            'drug_lookup',
+            'medicalService_lookup'
+        ]:
+            connection.update(return_data)
+        else:
+            self.simple_notify(return_data)
+        # except Exception:
+        #     # fault tolerence
+        #     pass

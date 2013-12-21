@@ -3,9 +3,7 @@
 		<div class="form-group col-md-6">
 			<input type="text" class="form-control negative-margin-left" ng-model="query" ng-change="filter()" placeholder="Search ...">
 		</div>
-		<div class="col-md-6 text-right">
-			<a class="btn btn-large btn-success" ng-click="toggleCreate()">Create</a>
-		</div>
+		<a class="col-md-2 col-md-offset-4 btn btn-large btn-success" ng-click="toggleCreate()">Create</a>
 	</div>
 	<div class="row">
 		<table class="table table-hover">
@@ -53,7 +51,7 @@
 				    <div class="modal-body">
 						<zippy label="Name" value="current.name"></zippy>
 						<zippy-number label="Age" value="current.age"></zippy-number>
-						<zippy label="Gender" value="current.gender"></zippy>
+						<selectie label="Gender" value="current.gender"></selectie>
 						<zippy label="Address" value="current.address"></zippy>
 						<zippy label="Phone number" value="current.phone_number"></zippy>
 				    </div>

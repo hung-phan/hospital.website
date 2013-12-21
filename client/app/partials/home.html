@@ -1,22 +1,24 @@
 <div class="container">
-	<nav class="navbar navbar-default" role="navigation">
-	    <div class="navbar-header">
-		    <a class="navbar-brand" ng-href="#home">Hospital Management System</a>
-		</div>
-	    <div class="collapse navbar-collapse navbar-ex1-collapse">
-		    <ul class="nav navbar-nav">
-			    <li><a ng-click="changeTemplateUrl('doctor.html')">Doctor List</a></li>
-			    <li><a ng-click="changeTemplateUrl('patient.html')">Patient List</a></li>
-			    <li><a ng-click="changeTemplateUrl('icd.html')">ICD List</a></li>
-			    <li><a ng-click="changeTemplateUrl('drug.html')">Drug List</a></li>
-			    <li><a ng-click="changeTemplateUrl('medical-service.html')">Medical Service</a></li>
-			    <li><a ng-click="changeTemplateUrl('medical-history.html')">Medical History</a></li>
-		    </ul>
-	    </div>
-	</nav>
+	<div class="row">
+		<nav class="navbar navbar-default col-md-12" role="navigation">
+		    <div class="navbar-header">
+			    <a class="navbar-brand" ng-href="#home">Hospital Management System</a>
+			</div>
+		    <div class="collapse navbar-collapse navbar-ex1-collapse">
+			    <ul class="nav navbar-nav">
+				    <li><a ng-click="changeTemplateUrl('doctor.html')">Doctor List</a></li>
+				    <li><a ng-click="changeTemplateUrl('patient.html')">Patient List</a></li>
+				    <li><a ng-click="changeTemplateUrl('icd.html')">ICD List</a></li>
+				    <li><a ng-click="changeTemplateUrl('drug.html')">Drug List</a></li>
+				    <li><a ng-click="changeTemplateUrl('medical-service.html')">Medical Service</a></li>
+				    <li><a ng-click="changeTemplateUrl('medical-history.html')">Medical History</a></li>
+			    </ul>
+		    </div>
+		</nav>
+	</div>
 	<div class="row">
 		<div class="col-md-2">
-			<ul class="nav nav-pills nav-stacked well">
+			<ul class="nav nav-pills nav-stacked">
 			    <li><strong>Menu</strong></li><hr />
 			    <li><a ng-href="#home"><span class="glyphicon glyphicon-home"></span> Home</a></li>
 			    <li><a><span class="glyphicon glyphicon-user"></span> Role</a></li>

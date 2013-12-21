@@ -14,6 +14,7 @@ SERVER_DIR = os.path.dirname(os.path.realpath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(SERVER_DIR, os.pardir))
 CLIENT_DIR = os.path.join(ROOT_DIR, "client/app")
 PARTIAL_DIR = os.path.join(CLIENT_DIR, "partials")
+
 # Database
 DB = Database('localhost', 'root', 'ttgr5678', 'hospital_schema')
 NO_DATA = 'No data'
@@ -78,7 +79,8 @@ class Home(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         """On message"""
-        self.handler.handle(tornado.escape.json_decode(message))
+        connection = self
+        self.handler.handle(connection, tornado.escape.json_decode(message))
 
     def on_close(self):
         """Close websocket"""
