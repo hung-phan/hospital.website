@@ -109,6 +109,7 @@ class GlobalHandler(Observable):
                 'query' : medical_history_handler.query,
                 'create' : medical_history_handler.create,
                 'update' : medical_history_handler.update,
+                'delete' : medical_history_handler.delete,
                 'patient_lookup' : medical_history_handler.patient_lookup,
                 'doctor_lookup' : medical_history_handler.doctor_lookup,
                 'drug_lookup' : medical_history_handler.drug_lookup,
@@ -119,22 +120,21 @@ class GlobalHandler(Observable):
 
     def handle(self, connection, msg):
         """Handle custom message from client"""
-        # try:
-        return_data = self.switch[msg['type']][msg['method']](
-            self.database, msg
-        )
-        # print return_data
-        if msg['method'] in [
-            'query', 
-            'filter', 
-            'patient_lookup',
-            'doctor_lookup',
-            'drug_lookup',
-            'medicalService_lookup'
-        ]:
-            connection.update(return_data)
-        else:
-            self.simple_notify(return_data)
-        # except Exception:
-        #     # fault tolerence
-        #     pass
+        try:
+            return_data = self.switch[msg['type']][msg['method']](
+                self.database, msg
+            )
+            if msg['method'] in [
+                'query', 
+                'filter', 
+                'patient_lookup',
+                'doctor_lookup',
+                'drug_lookup',
+                'medicalService_lookup'
+            ]:
+                connection.update(return_data)
+            else:
+                self.simple_notify(return_data)
+        except Exception as e:
+            # fault tolerence
+            print "I/O error({0}): {1}".format(e.errno, e.strerror)

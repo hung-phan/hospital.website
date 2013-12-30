@@ -754,6 +754,7 @@ define([
             $scope.query = '';
             $scope.new = {
                 name: '',
+                unit: '',
                 price: '',
                 reset: function() {
                     for (var prop in this) {
@@ -768,6 +769,7 @@ define([
             $scope.current = {
                 id: -1,
                 name: '',
+                unit: '',
                 price: ''
             };
 
@@ -832,6 +834,7 @@ define([
                         method: 'create',
                         elements: [{
                             name: $scope.new.name,
+                            unit: $scope.new.unit,
                             price: $scope.new.price
                         }]
                     });
@@ -934,16 +937,10 @@ define([
             }
 
             /* initilize datepicker */
-            angular.element("input[name='datepicker']").datepicker({
-                todayBtn : 'linked'
-            })
+            angular.element("input[name='datepicker']").datepicker()
             .on('changeDate', function(ev) {
                 $scope.$apply(function() {
-                    if ($scope.create.toggle) {
-                        $scope.create.visit_date = ev.currentTarget.value;
-                    } else {
-                        $scope.edit.visit_date = ev.currentTarget.value;
-                    }
+                    $scope.create.visit_date = ev.currentTarget.value;
                 });
             });
 
@@ -1025,6 +1022,7 @@ define([
                     fillValue('', this.services, 'string');
                     this.services.new.show = false;
                     this.services.data.length = 0;
+
                 }
             };
 
@@ -1102,6 +1100,7 @@ define([
                     fillValue('', this.services, 'string');
                     this.services.new.show = false;
                     this.services.data.length = 0;
+
                 }
             };
 
@@ -1156,9 +1155,8 @@ define([
             $scope.deleteElement = function(object, index, numberOfElement) {
                 alertify.confirm("Delete this row ?", function(ok) {
                     if (ok) {
-                        $scope.$apply(function() {
-                            object.splice(index, numberOfElement);
-                        });
+                        object.splice(index, numberOfElement);
+                        $scope.$apply();
                     }
                 });
             };
@@ -1197,19 +1195,19 @@ define([
                         visit_date: $scope.create.visit_date,
                         outcome: $scope.create.outcome,
                         patient_id: $scope.create.patient_id,
-                        patient_name: $scope.create.patient_name,
+                        patient_name : $scope.create.patient_name,
                         icd: {
                             id: $scope.create.icd.id,
                             code: $scope.create.icd.code
                         },
                         prescriptions: {
                             doctor_id: $scope.create.prescriptions.doctor_id,
-                            doctor_name: $scope.create.prescriptions.doctor_name,
+                            doctor_name : $scope.create.prescriptions.doctor_name,
                             data: prescriptionsData
                         },
                         lab_orders: {
                             doctor_id: $scope.create.lab_orders.doctor_id,
-                            doctor_name: $scope.create.lab_orders.doctor_name,
+                            doctor_name : $scope.create.lab_orders.doctor_name,
                             data: labOrdersData
                         },
                         services: {
@@ -1220,46 +1218,6 @@ define([
                 });
                 $scope.create.toggle = false;
                 $scope.create.reset();
-            };
-
-            $scope.editRecord = function(medical_history_id) {
-                $scope.edit.prescriptions.data.length = 0;
-                $scope.edit.lab_orders.data.length = 0;
-                $scope.edit.services.data.length = 0;
-                $.extend(true, $scope.edit, $scope.medicalHistories[medical_history_id]);
-            };
-
-            $scope.updateSubmit = function() {
-                var element = $.extend(true, {}, $scope.edit);
-                delete element.prescriptions.new;
-                delete element.lab_orders.new;
-                delete element.services.new;
-
-                socket.send({
-                    'type': 'medical_history_handler',
-                    'method': 'update',
-                    'elements': [element]
-                });
-                $scope.edit.toggle = false;
-            };
-
-            $scope.delete = function(medical_history_id) {
-                /* confirm dialog */
-                alertify.confirm("Delete this medical history ?", function(ok) {
-                    if (ok) {
-                        socket.send({
-                            type: 'medical_history_handler',
-                            method: 'delete',
-                            elements: [{
-                                id: $scope.medicalHistories[medical_history_id]['id']
-                            }]
-                        });
-                    }
-                });
-            };
-
-            $scope.export = function(medical_history_id) {
-
             };
 
             $scope.filter = function() {
@@ -1289,26 +1247,26 @@ define([
                             $scope.medicalHistories.unshift(data.elements[0]);
                             break;
                         case 'update':
-                            (function(){
-                                var medicalHistory = $scope.medicalHistories.filter(function(o) { 
-                                    return o.id == data.elements[0].id
-                                })[0];
-                                if (medicalHistory) {
-                                    func.simpleExtend(medicalHistory, data.elements[0]);
-                                }    
-                            }());
+                            // (function(){
+                            //     var medicalService = $scope.medicalServices.filter(function(o) { 
+                            //         return o.id == data.elements[0].id
+                            //     })[0];
+                            //     if (medicalService) {
+                            //         func.simpleExtend(medicalService, data.elements[0]);
+                            //     }    
+                            // }());
                             break;
                         case 'filter':
                             // $scope.noElements = data.noElements;
                             // $scope.medicalServices = data.elements;
                             break;
                         case 'delete':
-                            (function(){
-                                var index = func.findIndexByKeyValue(
-                                    $scope.medicalHistories, 'id', data.elements[0].id
-                                );
-                                $scope.medicalHistories.splice(index, 1);
-                            }());
+                            // (function(){
+                            //     var index = func.findIndexByKeyValue(
+                            //         $scope.medicalServices, 'id', data.elements[0].id
+                            //     );
+                            //     $scope.medicalServices.splice(index, 1);
+                            // }());
                             break;
                         case 'patient_lookup':
                             patientsDeferred.resolve(data.elements);
