@@ -1,19 +1,2 @@
-describe("HelloWorld", function() {
-	var appCtrl;
-	beforeEach(module("app"));
-	beforeEach(inject(function($scope) {
-		appCtrl = $controller("AppCtrl");
-	}));
+python learning
 
-	describe("AppCtrl", function() {
-		it('should have a message of hello', function() {
-			expect(appCtrl.message).toBe("Hello");
-		});
-	});
-});
-
-var app = angular.module("app", []);
-
-app.controller("AppCtrl", function() {
-	this.message = "Hello";
-});

@@ -908,7 +908,7 @@ define([
             /* function */
             function fillValue(value, object, type) {
                 for (var p in object) {
-                    if (typeof(object[p]) == type) {
+                    if (object.hasOwnProperty(p) && typeof(object[p]) == type) {
                         object[p] = value;
                     }
                 }
@@ -917,7 +917,7 @@ define([
             function returnObject(object, type) {
                 var o = {};
                 for (var p in object) {
-                    if (typeof(object[p]) == type) {
+                    if (object.hasOwnProperty(p) && typeof(object[p]) == type) {
                         o[p] = object[p];
                     }
                 }
@@ -935,17 +935,17 @@ define([
 
             /* initilize datepicker */
             angular.element("input[name='datepicker']").datepicker({
-                todayBtn : 'linked'
+                todayBtn: 'linked'
             })
-            .on('changeDate', function(ev) {
-                $scope.$apply(function() {
-                    if ($scope.create.toggle) {
-                        $scope.create.visit_date = ev.currentTarget.value;
-                    } else {
-                        $scope.edit.visit_date = ev.currentTarget.value;
-                    }
+                .on('changeDate', function(ev) {
+                    $scope.$apply(function() {
+                        if ($scope.create.toggle) {
+                            $scope.create.visit_date = ev.currentTarget.value;
+                        } else {
+                            $scope.edit.visit_date = ev.currentTarget.value;
+                        }
+                    });
                 });
-            });
 
             /* initialize */
             $scope.medicalHistories = [];
@@ -955,19 +955,13 @@ define([
                 toggle: false,
                 visit_date: '',
                 outcome: '',
-                patient_id: '',
                 patient_name: '',
-                icd: {
-                    code: '',
-                    id: ''
-                },
+                icd_code: '',
                 prescriptions: {
-                    doctor_id: '',
                     doctor_name: '',
                     data: [],
                     new: {
                         show: false,
-                        drug_id: '',
                         drug_name: '',
                         quantity: '',
                         dose: '',
@@ -981,7 +975,6 @@ define([
                     }
                 },
                 lab_orders: {
-                    doctor_id: '',
                     doctor_name: '',
                     data: [],
                     new: {
@@ -996,11 +989,10 @@ define([
                     }
                 },
                 services: {
-                    type: '',
+                    service_type: '',
                     data: [],
                     new: {
                         show: false,
-                        medical_service_id: '',
                         medical_service_name: '',
                         toggleShow: function() {
                             this.show = !this.show;
@@ -1012,7 +1004,6 @@ define([
                 },
                 reset: function() {
                     fillValue('', this, 'string');
-                    fillValue('', this.icd, 'string');
 
                     fillValue('', this.prescriptions, 'string');
                     this.prescriptions.new.show = false;
@@ -1032,19 +1023,13 @@ define([
                 toggle: false,
                 visit_date: '',
                 outcome: '',
-                patient_id: '',
                 patient_name: '',
-                icd: {
-                    code: '',
-                    id: ''
-                },
+                icd_code: '',
                 prescriptions: {
-                    doctor_id: '',
                     doctor_name: '',
                     data: [],
                     new: {
                         show: false,
-                        drug_id: '',
                         drug_name: '',
                         quantity: '',
                         dose: '',
@@ -1058,7 +1043,6 @@ define([
                     }
                 },
                 lab_orders: {
-                    doctor_id: '',
                     doctor_name: '',
                     data: [],
                     new: {
@@ -1073,11 +1057,10 @@ define([
                     }
                 },
                 services: {
-                    type: '',
+                    service_type: '',
                     data: [],
                     new: {
                         show: false,
-                        medical_service_id: '',
                         medical_service_name: '',
                         toggleShow: function() {
                             this.show = !this.show;
@@ -1089,7 +1072,6 @@ define([
                 },
                 reset: function() {
                     fillValue('', this, 'string');
-                    fillValue('', this.icd, 'string');
 
                     fillValue('', this.prescriptions, 'string');
                     this.prescriptions.new.show = false;
@@ -1119,10 +1101,6 @@ define([
                 /* push the object into data */
                 dataObject.data.push(object);
                 $scope.enter(dataObject.new);
-            };
-
-            $scope.typeaheadOnSelect = function(object, property, $item) {
-                object[property] = $item.id.toString();
             };
 
             /* defer and promise */
@@ -1167,7 +1145,6 @@ define([
                 var prescriptionsData = [];
                 $scope.create.prescriptions.data.forEach(function(item) {
                     prescriptionsData.push({
-                        drug_id: item.drug_id,
                         drug_name: item.drug_name,
                         quantity: item.quantity,
                         dose: item.dose,
@@ -1185,7 +1162,6 @@ define([
                 var servicesData = [];
                 $scope.create.services.data.forEach(function(item) {
                     servicesData.push({
-                        medical_service_id: item.medical_service_id,
                         medical_service_name: item.medical_service_name
                     });
                 });
@@ -1195,25 +1171,19 @@ define([
                     'method': 'create',
                     'elements': [{
                         visit_date: $scope.create.visit_date,
-                        outcome: $scope.create.outcome,
-                        patient_id: $scope.create.patient_id,
                         patient_name: $scope.create.patient_name,
-                        icd: {
-                            id: $scope.create.icd.id,
-                            code: $scope.create.icd.code
-                        },
+                        icd_code: $scope.create.icd_code,
+                        outcome: $scope.create.outcome,
                         prescriptions: {
-                            doctor_id: $scope.create.prescriptions.doctor_id,
                             doctor_name: $scope.create.prescriptions.doctor_name,
                             data: prescriptionsData
                         },
                         lab_orders: {
-                            doctor_id: $scope.create.lab_orders.doctor_id,
                             doctor_name: $scope.create.lab_orders.doctor_name,
                             data: labOrdersData
                         },
                         services: {
-                            service_type: $scope.create.services.type,
+                            service_type: $scope.create.services.service_type,
                             data: servicesData
                         }
                     }]
@@ -1223,9 +1193,13 @@ define([
             };
 
             $scope.editRecord = function(medical_history_id) {
-                $scope.edit.prescriptions.data.length = 0;
-                $scope.edit.lab_orders.data.length = 0;
-                $scope.edit.services.data.length = 0;
+                [
+                    $scope.edit.prescriptions,
+                    $scope.edit.lab_orders,
+                    $scope.edit.services
+                ].forEach(function(item) {
+                    item.data.length = 0;
+                });
                 $.extend(true, $scope.edit, $scope.medicalHistories[medical_history_id]);
             };
 
@@ -1251,7 +1225,7 @@ define([
                             type: 'medical_history_handler',
                             method: 'delete',
                             elements: [{
-                                id: $scope.medicalHistories[medical_history_id]['id']
+                                id: $scope.medicalHistories[medical_history_id].id
                             }]
                         });
                     }
@@ -1259,17 +1233,23 @@ define([
             };
 
             $scope.export = function(medical_history_id) {
-
+                $location.path('/export');
             };
 
             $scope.filter = function() {
-
+                socket.send({
+                    type: 'medical_history_handler',
+                    method: 'filter',
+                    page: 1,
+                    max: MAX_ITEM_PER_PAGE,
+                    keyword: $scope.query
+                });
             };
 
             $scope.toPage = function(pageNumber) {
                 socket.send({
                     type: 'medical_history_handler',
-                    method: ($scope.query == '') ? 'query' : 'filter',
+                    method: ($scope.query === '') ? 'query' : 'filter',
                     page: pageNumber,
                     max: MAX_ITEM_PER_PAGE,
                     keyword: $scope.query
@@ -1289,21 +1269,21 @@ define([
                             $scope.medicalHistories.unshift(data.elements[0]);
                             break;
                         case 'update':
-                            (function(){
-                                var medicalHistory = $scope.medicalHistories.filter(function(o) { 
-                                    return o.id == data.elements[0].id
+                            (function() {
+                                var medicalHistory = $scope.medicalHistories.filter(function(o) {
+                                    return o.id == data.elements[0].id;
                                 })[0];
                                 if (medicalHistory) {
                                     func.simpleExtend(medicalHistory, data.elements[0]);
-                                }    
+                                }
                             }());
                             break;
                         case 'filter':
-                            // $scope.noElements = data.noElements;
-                            // $scope.medicalServices = data.elements;
+                             $scope.noElements = data.noElements;
+                             $scope.medicalHistories = data.elements;
                             break;
                         case 'delete':
-                            (function(){
+                            (function() {
                                 var index = func.findIndexByKeyValue(
                                     $scope.medicalHistories, 'id', data.elements[0].id
                                 );

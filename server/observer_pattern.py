@@ -2,9 +2,11 @@
 
 """Observer and observable implemetation"""
 
+
 class Observable(object):
 
     """Observable"""
+
     def __init__(self):
         self.observers = list()
         self.changed = False

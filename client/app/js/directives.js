@@ -107,8 +107,6 @@ define(['angular'], function(angular) {
 	    			data : '=',
 	    			editMode : '=',
 	    			placeHolder : '@'
-	    		}, link : function(scope, element, attrs) {
-
 	    		}
 			};
 		}

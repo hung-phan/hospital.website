@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 """Server"""
 
 import tornado.ioloop
@@ -19,36 +20,45 @@ PARTIAL_DIR = os.path.join(CLIENT_DIR, "partials")
 DB = Database('localhost', 'root', 'ttgr5678', 'hospital_schema')
 NO_DATA = 'No data'
 
+
 class MainHandler(tornado.web.RequestHandler):
+
     """Render index.html"""
 
     def get(self):
         """Main page"""
         self.render(CLIENT_DIR + '/index.html')
 
+
 class PartialHandler(tornado.web.RequestHandler):
+
     """Render partial html files"""
 
     def get(self, page_name):
         """Partial html page"""
         self.render("{0}/{1}".format(PARTIAL_DIR, page_name))
 
+
 class LoginHandler(tornado.web.RequestHandler):
+
     """Login Handler"""
 
     def post(self):
         """Post"""
         username = self.get_argument('username', NO_DATA)
         password = self.get_argument('password', NO_DATA)
-        self.write(json.dumps({'validUser': 'true' \
-            if DB.login(username, password) else 'false'}))
+        self.write(json.dumps(
+            {'validUser': 'true' if DB.login(username, password) \
+                    else 'false'}))
 
     def on_complete(self):
         """On complete funtion"""
         self.write('Login handling')
         self.finish()
 
+
 class CreateAccountHandler(tornado.web.RequestHandler):
+
     """Create account handler"""
 
     def post(self):
@@ -57,18 +67,21 @@ class CreateAccountHandler(tornado.web.RequestHandler):
         last_name = self.get_argument('lastName', NO_DATA)
         username = self.get_argument('username', NO_DATA)
         password = self.get_argument('password', NO_DATA)
-        
+
         # create account
-        self.write(json.dumps({'success' : 'true' \
-            if DB.register_user(first_name, last_name, \
-                username, password) else 'false'}))
+        self.write(json.dumps(
+            {'success': 'true' if DB.register_user(
+                first_name, last_name, username, password) \
+                else 'false'}))
 
     def on_complete(self):
         """On complete funtion"""
         self.write('Create account')
         self.finish()
 
+
 class Home(tornado.websocket.WebSocketHandler):
+
     """Websocket handler"""
 
     handler = GlobalHandler(DB)
@@ -90,6 +103,7 @@ class Home(tornado.websocket.WebSocketHandler):
         """Update method"""
         self.write_message(args)
 
+
 def main():
     """Main program"""
     application = tornado.web.Application([
@@ -98,19 +112,19 @@ def main():
         (r"/login", LoginHandler),
         (r"/create-account", CreateAccountHandler),
         (r"/home", Home),
-        (r"/js/(.*)", tornado.web.StaticFileHandler, \
-            {"path" : os.path.join(CLIENT_DIR, "js")},),
-        (r"/css/(.*)", tornado.web.StaticFileHandler, \
-            {"path" : os.path.join(CLIENT_DIR, "css")},),
-        (r"/img/(.*)", tornado.web.StaticFileHandler, \
-            {"path" : os.path.join(CLIENT_DIR, "img")},),
-        (r"/fonts/(.*)", tornado.web.StaticFileHandler, \
-            {"path" : os.path.join(CLIENT_DIR, "fonts")},),
+        (r"/js/(.*)", tornado.web.StaticFileHandler,
+            {"path": os.path.join(CLIENT_DIR, "js")},),
+        (r"/css/(.*)", tornado.web.StaticFileHandler,
+            {"path": os.path.join(CLIENT_DIR, "css")},),
+        (r"/img/(.*)", tornado.web.StaticFileHandler,
+            {"path": os.path.join(CLIENT_DIR, "img")},),
+        (r"/fonts/(.*)", tornado.web.StaticFileHandler,
+            {"path": os.path.join(CLIENT_DIR, "fonts")},),
     ])
 
     port = 12345
     print('server start at port {0}'.format(port))
-    
+
     # start server
     application.listen(port)
     tornado.ioloop.IOLoop.instance().start()
