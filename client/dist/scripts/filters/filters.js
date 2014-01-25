@@ -1,0 +1,1 @@
+define(["angular"],function(t){"use strict";t.module("hospitalFilters",[]).filter("numberFilter",function(){return function(t){return t.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")}})});

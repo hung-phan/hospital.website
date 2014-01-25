@@ -13,8 +13,9 @@ from global_handler import GlobalHandler
 # Static files directories
 SERVER_DIR = os.path.dirname(os.path.realpath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(SERVER_DIR, os.pardir))
-CLIENT_DIR = os.path.join(ROOT_DIR, "client/app")
+CLIENT_DIR = os.path.join(ROOT_DIR, "client/dist")
 PARTIAL_DIR = os.path.join(CLIENT_DIR, "partials")
+TEMPLATE_DIR = os.path.join(CLIENT_DIR, "template")
 
 # Database
 DB = Database('localhost', 'root', 'ttgr5678', 'hospital_schema')
@@ -28,6 +29,15 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         """Main page"""
         self.render(CLIENT_DIR + '/index.html')
+
+
+class NotFoundHandler(tornado.web.RequestHandler):
+
+    """Render 404.html"""
+
+    def get(self):
+        """404 page"""
+        self.render(CLIENT_DIR + '/404.html')
 
 
 class PartialHandler(tornado.web.RequestHandler):
@@ -48,8 +58,8 @@ class LoginHandler(tornado.web.RequestHandler):
         username = self.get_argument('username', NO_DATA)
         password = self.get_argument('password', NO_DATA)
         self.write(json.dumps(
-            {'validUser': 'true' if DB.login(username, password) \
-                    else 'false'}))
+            {'validUser': 'true' if DB.login(username, password)
+             else 'false'}))
 
     def on_complete(self):
         """On complete funtion"""
@@ -71,7 +81,7 @@ class CreateAccountHandler(tornado.web.RequestHandler):
         # create account
         self.write(json.dumps(
             {'success': 'true' if DB.register_user(
-                first_name, last_name, username, password) \
+                first_name, last_name, username, password)
                 else 'false'}))
 
     def on_complete(self):
@@ -108,21 +118,26 @@ def main():
     """Main program"""
     application = tornado.web.Application([
         (r"/", MainHandler),
+        (r"/404.html", NotFoundHandler),
         (r"/partials/(.*)", PartialHandler),
         (r"/login", LoginHandler),
         (r"/create-account", CreateAccountHandler),
         (r"/home", Home),
-        (r"/js/(.*)", tornado.web.StaticFileHandler,
-            {"path": os.path.join(CLIENT_DIR, "js")},),
-        (r"/css/(.*)", tornado.web.StaticFileHandler,
-            {"path": os.path.join(CLIENT_DIR, "css")},),
-        (r"/img/(.*)", tornado.web.StaticFileHandler,
-            {"path": os.path.join(CLIENT_DIR, "img")},),
-        (r"/fonts/(.*)", tornado.web.StaticFileHandler,
-            {"path": os.path.join(CLIENT_DIR, "fonts")},),
+        (r"/template/(.*)", tornado.web.StaticFileHandler,
+            {"path": os.path.join(CLIENT_DIR, "template")}),
+        (r"/scripts/(.*)", tornado.web.StaticFileHandler,
+            {"path": os.path.join(CLIENT_DIR, "scripts")},),
+        (r"/styles/(.*)", tornado.web.StaticFileHandler,
+            {"path": os.path.join(CLIENT_DIR, "styles")},),
+        (r"/images/(.*)", tornado.web.StaticFileHandler,
+            {"path": os.path.join(CLIENT_DIR, "images")},),
+        (r"/bower_components/sass-bootstrap/fonts/(.*)",
+            tornado.web.StaticFileHandler,
+            {"path": os.path.join(CLIENT_DIR,
+                                  "bower_components/sass-bootstrap/fonts")},),
     ])
 
-    port = 12345
+    port = 8000
     print('server start at port {0}'.format(port))
 
     # start server

@@ -1,0 +1,1 @@
+<div class=text-center><ul class=pagination><li ng-class="{disabled: currentPage == 1}"><a ng-click="goTo(currentPage - 1)">&laquo;</a></li><li ng-repeat="page in pages" ng-class="{active: currentPage == page}"><a ng-click=goTo(page)>[[page]]</a></li><li ng-class="{disabled: currentPage == maxPage}"><a ng-click="goTo(currentPage + 1)">&raquo;</a></li></ul></div>
