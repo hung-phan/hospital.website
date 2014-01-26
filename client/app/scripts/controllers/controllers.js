@@ -92,8 +92,12 @@ define([
                 $location.path('/');
             }
             
+            // connect to server via websocket
+            socket.connect();
+
             $scope.logout = function() {
                 authenticationService.logoutSession();
+                socket.disconnect();
                 $location.path('/');
             };
 

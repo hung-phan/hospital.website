@@ -6,19 +6,21 @@ import os
 import random
 import encryption
 
+
 class Database:
+
     """Create database from script and handling data input"""
 
     def __init__(self, db_host, db_user, db_passwd, db_name):
         """Initialize database"""
         self.db = SimpleMysql(
-            host = db_host, 
-            db = db_name,
-            user = db_user, 
-            passwd = db_passwd,
-            keep_alive = True
+            host=db_host,
+            db=db_name,
+            user=db_user,
+            passwd=db_passwd,
+            keep_alive=True
         )
-       
+
         self.db.query('SET NAMES utf8;')
         self.db.query('SET CHARACTER SET utf8;')
         self.db.query('SET character_set_connection=utf8;')
@@ -29,7 +31,7 @@ class Database:
                 os.path.join(
                     os.path.dirname(
                         os.path.abspath(__file__)
-                    ), 
+                    ),
                     'sqlscript.sql'
                 ), 'r'
             )
@@ -53,8 +55,8 @@ class Database:
     def username_exist(self, username):
         """Validate username"""
         return True if self.db.getOne(
-            'user_table', 
-            ['username'], 
+            'user_table',
+            ['username'],
             ('username=%s', [username])
         ) else False
 
@@ -65,17 +67,17 @@ class Database:
             return False
 
         algo = 'sha1'
-        salt = encryption.get_hexdigest(algo, str(random.random()), 
-            str(random.random()))[:5]
+        salt = encryption.get_hexdigest(algo, str(random.random()),
+                                        str(random.random()))[:5]
         hsh = encryption.get_hexdigest(algo, salt, raw_password)
         password = '{0}${1}${2}'.format(algo, salt, hsh)
 
         self.db.insert('user_table', {
-            'first_name' : first_name,
-            'last_name' : last_name,
-            'username' : username,
-            'password' : password,
-            'role' : 'normal'
+            'first_name': first_name,
+            'last_name': last_name,
+            'username': username,
+            'password': password,
+            'role': 'normal'
         })
         return True
 
@@ -89,8 +91,8 @@ class Database:
         )
         if user_password:
             algo, salt, hsh = user_password[0].split('$')
-            return True if hsh == encryption.get_hexdigest(algo, 
-                salt, password) else False
+            return True if hsh == encryption.get_hexdigest(algo,
+                                                           salt, password) else False
         else:
             return False
 
@@ -111,6 +113,6 @@ class Database:
         return self.db.query(
             'select count(id) from %s where %s' % (table, condition)
         ).fetchone()[0]
-    
+
     def get_database(self):
         return self.db

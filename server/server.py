@@ -2,6 +2,7 @@
 
 """Server"""
 
+import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
@@ -15,7 +16,6 @@ SERVER_DIR = os.path.dirname(os.path.realpath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(SERVER_DIR, os.pardir))
 CLIENT_DIR = os.path.join(ROOT_DIR, "client/dist")
 PARTIAL_DIR = os.path.join(CLIENT_DIR, "partials")
-TEMPLATE_DIR = os.path.join(CLIENT_DIR, "template")
 
 # Database
 DB = Database('localhost', 'root', 'ttgr5678', 'hospital_schema')
@@ -141,7 +141,9 @@ def main():
     print('server start at port {0}'.format(port))
 
     # start server
-    application.listen(port)
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(port)
+    # application.listen(port)
     tornado.ioloop.IOLoop.instance().start()
 
 if __name__ == "__main__":

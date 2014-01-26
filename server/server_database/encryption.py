@@ -6,6 +6,7 @@ Prerequisite Django library to run."""
 from django.utils.encoding import smart_str
 from django.utils.hashcompat import md5_constructor, sha_constructor
 
+
 def get_hexdigest(algorithm, salt, raw_password):
     """
     Returns a string of the hexdigest of the given plaintext password and salt

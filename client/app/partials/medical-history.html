@@ -1,33 +1,33 @@
 <div ng-controller="MedicalHistoryController">
 	<div class="row">
-		<div class="form-group col-md-6">
+		<div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
 			<input type="text" class="form-control negative-margin-left" ng-model="query" ng-change="filter()" placeholder="Search ...">
 		</div>
-		<a class="col-md-2 col-md-offset-4 btn btn-large btn-success" ng-click="create.toggle = true; edit.toggle = false">Create</a>
+		<a class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xs-offset-4 col-sm-offset-4 col-md-offset-4 col-lg-offset-4 btn btn-large btn-success" ng-click="create.toggle = true; edit.toggle = false">Create</a>
 	</div>
 	<!-- Display form -->
 	<div class="row">
-	    <div class="col-md-6 my-well" ng-repeat="medicalHistory in medicalHistories" ng-hide="create.toggle || edit.toggle">
-	        <div class="col-md-12">
+	    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 my-well" ng-repeat="medicalHistory in medicalHistories" ng-hide="create.toggle || edit.toggle">
+	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	            <strong>Visit date: </strong>[[medicalHistory.visit_date]]
 	        </div>
-	        <div class="col-md-12">
+	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	            <strong>Patient name: </strong>[[medicalHistory.patient_name]]
 	        </div>
-	        <div class="col-md-12">
+	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	            <strong>ICD: </strong>[[medicalHistory.icd_code]]
 	        </div>
-	        <div class="col-md-12">
+	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	            <strong>Outcome: </strong>[[medicalHistory.outcome]]
 	        </div>
-	        <div class="col-md-12">
+	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	        	<div class="row">
-	        		<div class="col-md-6">
+	        		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 			        	<a class="lead" ng-click="medicalHistory.showMore = !medicalHistory.showMore">
 			        		[[medicalHistory.showMore && 'Show less' || 'Show more']]
 			        	</a>
 	        		</div>
-	        		<div class="col-md-6 text-right">
+	        		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
 			        	<ul class="list-inline">
 							<li><a class="btn btn-large btn-primary" ng-click="edit.toggle = true; editRecord($index)">
 								<span class="glyphicon glyphicon-pencil"></span>
@@ -43,11 +43,11 @@
 	        	</div>
 	        </div>
 	        <div ng-show="medicalHistory.showMore">
-		        <div class="col-md-12">
+		        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		            <strong>Prescription by: </strong>[[medicalHistory.prescriptions.doctor_name]]
 		        </div>
-		        <div class="col-md-12">
-		            <div class="col-md-10 col-md-offset-2" ng-show="medicalHistory.prescriptions.data.length != 0">
+		        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1" ng-show="medicalHistory.prescriptions.data.length != 0">
 		                <table class="table table-hover">
 		                    <thead>
 		                        <tr>
@@ -76,11 +76,11 @@
 		                </table>
 		            </div>
 		        </div>
-		    	<div class="col-md-12">
+		    	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		    		<strong>Lab order by: </strong>[[medicalHistory.lab_orders.doctor_name]]
 		        </div>
-		        <div class="col-md-12">
-		            <div class="col-md-10 col-md-offset-2" ng-show="medicalHistory.lab_orders.data.length != 0">
+		        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1" ng-show="medicalHistory.lab_orders.data.length != 0">
 		                <table class="table table-hover">
 		                    <thead>
 		                        <tr>
@@ -97,11 +97,11 @@
 		                </table>
 		            </div>
 		        </div>
-		    	<div class="col-md-12">
+		    	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		    		<strong>Service type: </strong>[[medicalHistory.services.service_type]]
 		        </div>
-		        <div class="col-md-12">
-		            <div class="col-md-10 col-md-offset-2" ng-show="medicalHistory.services.data.length != 0">
+		        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1" ng-show="medicalHistory.services.data.length != 0">
 		                <table class="table table-hover">
 		                    <thead>
 		                        <tr>
@@ -131,8 +131,8 @@
 		<legend>Create form</legend>
 		<!-- Visit Date -->
 		<div class="form-group">
-		    <label class="col-md-3 control-label">Date</label>
-		    <div class="col-md-9">
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Date</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<div class="input-group date">
 					<input class="datepicker form-control" ng-model="create.visit_date" data-date-format="dd/mm/yyyy" name="datepicker" placeholder="Enter visit date"/>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -141,8 +141,8 @@
 		</div>
 		<!-- Patient Name -->
 		<div class="form-group">
-		    <label class="col-md-3 control-label">Patient Name</label>
-		    <div class="col-md-9">
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Patient Name</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="create.patient_name"
 					typeahead="patient.name for patient in getPatients($viewValue) | filter:$viewValue"
@@ -151,8 +151,8 @@
 		</div>
 		<!-- Enter ICD -->
 		<div class="form-group">
-			<label class="col-md-3 control-label">ICD</label>
-		    <div class="col-md-9">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">ICD</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="create.icd_code"
 					typeahead-template-url="partials/icd-typeahead-template.html"
@@ -162,8 +162,8 @@
 		</div>
 		<!-- Prescribe by -->
 		<div class="form-group">
-			<label class="col-md-3 control-label">Prescribed by</label>
-		    <div class="col-md-9">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Prescribed by</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="create.prescriptions.doctor_name"
 					typeahead="doctor.name for doctor in getDoctors($viewValue) | filter:$viewValue"
@@ -172,7 +172,7 @@
 		</div>
 		<!-- Prescriptions -->
 		<div class="form-group" ng-show="create.prescriptions.data.length != 0">
-			<div class="col-md-9 col-md-offset-3">
+			<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -232,7 +232,7 @@
 		</div>
 		<!-- Enter Prescription -->
 		<div class="form-group">
-		    <div class="col-md-9 col-md-offset-3">
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
 		    	<table class="table" ng-show="create.prescriptions.new.show">
 					<thead>
 						<tr>
@@ -277,8 +277,8 @@
 		</div>
 		<!-- Lab Order by -->
 		<div class="form-group">
-			<label class="col-md-3 control-label">Lab Order by</label>
-		    <div class="col-md-9">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Lab Order by</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="create.lab_orders.doctor_name"
 					typeahead="doctor.name for doctor in getDoctors($viewValue) | filter:$viewValue"
@@ -287,7 +287,7 @@
 		</div>
 		<!-- Lab Orders -->
 		<div class="form-group" ng-show="create.lab_orders.data.length != 0">
-			<div class="col-md-9 col-md-offset-3">
+			<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -322,7 +322,7 @@
 		</div>
 		<!-- Enter Lab Order -->
 		<div class="form-group">
-		    <div class="col-md-9 col-md-offset-3">
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
 		    	<table class="table" ng-show="create.lab_orders.new.show">
 					<thead>
 						<tr>
@@ -352,14 +352,14 @@
 		</div>
 		<!-- Service type -->
 		<div class="form-group">
-		    <label class="col-md-3 control-label">Service type</label>
-		    <div class="col-md-9">
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Service type</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" ng-model="create.services.service_type" ng-trim="true" placeholder="Enter service type">
 		    </div>
 		</div>
 		<!-- Services -->
 		<div class="form-group" ng-show="create.services.data.length != 0">
-			<div class="col-md-9 col-md-offset-3">
+			<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -395,7 +395,7 @@
 		</div>
 		<!-- Enter Service -->
 		<div class="form-group">
-		    <div class="col-md-9 col-md-offset-3">
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
 		    	<table class="table" ng-show="create.services.new.show">
 					<thead>
 						<tr>
@@ -428,14 +428,14 @@
 		</div>
 		<!-- Enter outcome -->
 		<div class="form-group">
-			<label class="col-md-3 control-label">Outcome</label>
-		    <div class="col-md-9">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Outcome</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" ng-model="create.outcome" placeholder="Enter Outcome">
 		    </div>
 		</div>
 		<!-- Finish -->
 		<div class="form-group">
-		    <div class="col-md-9 col-md-offset-3 text-right">
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3 text-right">
 				<button type="submit" class="btn btn-info" ng-click="createSubmit()">Finish</button>
 				<button type="submit" class="btn btn-danger" ng-click="create.toggle = false; create.reset()">Cancel</button>
 		    </div>
@@ -447,8 +447,8 @@
 		<legend>Edit form</legend>
 		<!-- Visit Date -->
 		<div class="form-group">
-		    <label class="col-md-3 control-label">Date</label>
-		    <div class="col-md-9">
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Date</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<div class="input-group date">
 					<input class="datepicker form-control" ng-model="edit.visit_date" data-date-format="dd/mm/yyyy" name="datepicker" placeholder="Enter visit date"/>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -457,8 +457,8 @@
 		</div>
 		<!-- Patient Name -->
 		<div class="form-group">
-		    <label class="col-md-3 control-label">Patient Name</label>
-		    <div class="col-md-9">
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Patient Name</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="edit.patient_name"
 					typeahead="patient.name for patient in getPatients($viewValue) | filter:$viewValue"
@@ -467,8 +467,8 @@
 		</div>
 		<!-- Enter ICD -->
 		<div class="form-group">
-			<label class="col-md-3 control-label">ICD</label>
-		    <div class="col-md-9">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">ICD</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="edit.icd_code"
 					typeahead-template-url="partials/icd-typeahead-template.html"
@@ -478,8 +478,8 @@
 		</div>
 		<!-- Prescribe by -->
 		<div class="form-group">
-			<label class="col-md-3 control-label">Prescribed by</label>
-		    <div class="col-md-9">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Prescribed by</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="edit.prescriptions.doctor_name"
 					typeahead="doctor.name for doctor in getDoctors($viewValue) | filter:$viewValue"
@@ -488,7 +488,7 @@
 		</div>
 		<!-- Prescriptions -->
 		<div class="form-group" ng-show="edit.prescriptions.data.length != 0">
-			<div class="col-md-9 col-md-offset-3">
+			<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -548,7 +548,7 @@
 		</div>
 		<!-- Enter Prescription -->
 		<div class="form-group">
-		    <div class="col-md-9 col-md-offset-3">
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
 		    	<table class="table" ng-show="edit.prescriptions.new.show">
 					<thead>
 						<tr>
@@ -593,8 +593,8 @@
 		</div>
 		<!-- Lab Order by -->
 		<div class="form-group">
-			<label class="col-md-3 control-label">Lab Order by</label>
-		    <div class="col-md-9">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Lab Order by</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="edit.lab_orders.doctor_name"
 					typeahead="doctor.name for doctor in getDoctors($viewValue) | filter:$viewValue"
@@ -603,7 +603,7 @@
 		</div>
 		<!-- Lab Orders -->
 		<div class="form-group" ng-show="edit.lab_orders.data.length != 0">
-			<div class="col-md-9 col-md-offset-3">
+			<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -638,7 +638,7 @@
 		</div>
 		<!-- Enter Lab Order -->
 		<div class="form-group">
-		    <div class="col-md-9 col-md-offset-3">
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
 		    	<table class="table" ng-show="edit.lab_orders.new.show">
 					<thead>
 						<tr>
@@ -668,14 +668,14 @@
 		</div>
 		<!-- Service type -->
 		<div class="form-group">
-		    <label class="col-md-3 control-label">Service type</label>
-		    <div class="col-md-9">
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Service type</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" ng-model="edit.services.service_type" ng-trim="true" placeholder="Enter service type">
 		    </div>
 		</div>
 		<!-- Services -->
 		<div class="form-group" ng-show="edit.services.data.length != 0">
-			<div class="col-md-9 col-md-offset-3">
+			<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -711,7 +711,7 @@
 		</div>
 		<!-- Enter Service -->
 		<div class="form-group">
-		    <div class="col-md-9 col-md-offset-3">
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
 		    	<table class="table" ng-show="edit.services.new.show">
 					<thead>
 						<tr>
@@ -744,14 +744,14 @@
 		</div>
 		<!-- Enter outcome -->
 		<div class="form-group">
-			<label class="col-md-3 control-label">Outcome</label>
-		    <div class="col-md-9">
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Outcome</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" ng-model="edit.outcome" placeholder="Enter Outcome">
 		    </div>
 		</div>
 		<!-- Finish -->
 		<div class="form-group">
-		    <div class="col-md-9 col-md-offset-3 text-right">
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3 text-right">
 				<button type="submit" class="btn btn-info" ng-click="updateSubmit()">Finish</button>
 				<button type="submit" class="btn btn-danger" ng-click="edit.toggle = false;">Cancel</button>
 		    </div>

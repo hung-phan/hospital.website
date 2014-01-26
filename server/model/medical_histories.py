@@ -382,7 +382,7 @@ class MedicalHistory:
             ['medical_history_table.id'],
             [(data['page'] - 1) * data['max'], data['max']]
         )
-        
+
         # return message
         msg = dict()
         msg['type'] = self.handler
@@ -555,7 +555,7 @@ class MedicalHistory:
         if group_by:
             sql += " GROUP BY %s" % group_by[0]
             sql += " ORDER BY %s DESC" % group_by[0]
-        
+
         # limit
         if limit:
             sql += " LIMIT %s" % limit[0]

@@ -40,11 +40,13 @@ define([
         function($q, $rootScope) {
             var service = {
                 websocket: undefined,
+                logout: false,
                 connect: function() {
                     try{
                         var url = 'ws://localhost:8000/home', self = this;
+                        this.logout = false;
                         this.websocket = (window.MozWebSocket) ? new MozWebSocket(url) : new WebSocket(url);
-                        this.websocket.onopen = function() { alertify.log('WebSocket is opened'); };
+                        this.websocket.onopen = function() { alertify.success('WebSocket is opened'); };
                         this.websocket.onclose = function() { 
                             self.reconnect();
                         };
@@ -56,15 +58,21 @@ define([
                     }
                 },
                 reconnect: function() {
-                    var self = this;
-                    alertify.log('Websocket is closed. Reconnect in 5s');
-                    setTimeout(function() { self.connect(); }, 5000);
+                    if (!this.logout) {
+                        var self = this;
+                        alertify.log('Websocket is closed. Reconnect in 5s');
+                        setTimeout(function() { self.connect(); }, 5000);
+                    }
+                },
+                disconnect: function() {
+                    this.logout = true;
+                    this.websocket.close();
+                    alertify.success('Logout success');
                 },
                 callback : function(message) { },
                 registerCallBack: function(callbackFunction) { this.callback = callbackFunction; },
                 send: function(message) { this.websocket.send(JSON.stringify(message)); }
             };
-            service.connect();
             return service;
         }
     ]);
