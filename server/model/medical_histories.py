@@ -14,7 +14,8 @@ class MedicalHistory:
             'visit_date',
             'patient_name',
             'icd_code',
-            'outcome'
+            'outcome',
+            'revisit_date'
         ]
         self.prescription_args_list = [
             'id',
@@ -22,7 +23,10 @@ class MedicalHistory:
             'doctor_name',
             'drug_name',
             'quantity',
-            'dose',
+            'morning',
+            'noon',
+            'afternoon',
+            'evening',
             'notice'
         ]
         self.lab_order_args_list = [
@@ -65,6 +69,7 @@ class MedicalHistory:
                 medical_history['patient_name'] = _element[2]
                 medical_history['icd_code'] = _element[3]
                 medical_history['outcome'] = _element[4]
+                medical_history['revisit_date'] = _element[5]
 
                 # prescriptions
                 prescriptions = self.database.get_database().getAll(
@@ -84,8 +89,11 @@ class MedicalHistory:
                             'doctor_name'] = detail[2]
                         element['drug_name'] = detail[3]
                         element['quantity'] = detail[4]
-                        element['dose'] = detail[5]
-                        element['notice'] = detail[6]
+                        element['morning'] = detail[5]
+                        element['noon'] = detail[6]
+                        element['afternoon'] = detail[7]
+                        element['evening'] = detail[8]
+                        element['notice'] = detail[9]
                         medical_history['prescriptions']['data'].append(element)
 
                 # labaratories
@@ -139,7 +147,8 @@ class MedicalHistory:
                 'visit_date': element['visit_date'],
                 'patient_name': element['patient_name'],
                 'icd_code': element['icd_code'],
-                'outcome': element['outcome']
+                'outcome': element['outcome'],
+                'revisit_date': element['revisit_date']
             }
         )
         medical_history_id = self.database.get_last_insert_id(
@@ -193,6 +202,7 @@ class MedicalHistory:
             'patient_name': element['patient_name'],
             'icd_code': element['icd_code'],
             'outcome': element['outcome'],
+            'revisit_date': element['revisit_date'],
             'prescriptions': {
                 'doctor_name': element['prescriptions']['doctor_name'],
                 'data': element['prescriptions']['data']
@@ -220,7 +230,8 @@ class MedicalHistory:
                 'visit_date': element['visit_date'],
                 'patient_name': element['patient_name'],
                 'icd_code': element['icd_code'],
-                'outcome': element['outcome']
+                'outcome': element['outcome'],
+                'revisit_date': element['revisit_date']
             },
             ('id=%s', [element['id']])
         )
@@ -238,7 +249,10 @@ class MedicalHistory:
                 'doctor_name': element['prescriptions']['doctor_name'],
                 'drug_name': datum['drug_name'],
                 'quantity': datum['quantity'],
-                'dose': datum['dose'],
+                'morning': datum['morning'],
+                'noon': datum['noon'],
+                'afternoon': datum['afternoon'],
+                'evening': datum['evening'],
                 'notice': datum['notice']
             }
             if datum.has_key('id'):
@@ -337,6 +351,7 @@ class MedicalHistory:
             'patient_name': element['patient_name'],
             'icd_code': element['icd_code'],
             'outcome': element['outcome'],
+            'revisit_date': element['revisit_date'],
             'prescriptions': {
                 'doctor_name': element['prescriptions']['doctor_name'],
                 'data': element['prescriptions']['data']
@@ -361,6 +376,7 @@ class MedicalHistory:
                 'medical_history_table.patient_name',
                 'medical_history_table.icd_code',
                 'medical_history_table.outcome',
+                'medical_history_table.revisit_date',
                 'prescription_table.doctor_name',
                 'labaratory_order_table.doctor_name'
             ],
@@ -411,6 +427,7 @@ class MedicalHistory:
                 medical_history['patient_name'] = _element[2]
                 medical_history['icd_code'] = _element[3]
                 medical_history['outcome'] = _element[4]
+                medical_history['outcome'] = _element[5]
 
                 # prescriptions
                 prescriptions = self.database.get_database().getAll(
@@ -430,8 +447,11 @@ class MedicalHistory:
                             'doctor_name'] = detail[2]
                         element['drug_name'] = detail[3]
                         element['quantity'] = detail[4]
-                        element['dose'] = detail[5]
-                        element['notice'] = detail[6]
+                        element['morning'] = detail[5]
+                        element['noon'] = detail[6]
+                        element['afternoon'] = detail[7]
+                        element['evening'] = detail[8]
+                        element['notice'] = detail[9]
                         medical_history['prescriptions']['data'].append(element)
 
                 # labaratories

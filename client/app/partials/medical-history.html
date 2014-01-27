@@ -9,16 +9,11 @@
 	<div class="row">
 	    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 my-well" ng-repeat="medicalHistory in medicalHistories" ng-hide="create.toggle || edit.toggle">
 	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	            <strong>Visit date: </strong>[[medicalHistory.visit_date]]
-	        </div>
-	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	            <strong>Patient name: </strong>[[medicalHistory.patient_name]]
-	        </div>
-	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	            <strong>ICD: </strong>[[medicalHistory.icd_code]]
-	        </div>
-	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	            <strong>Outcome: </strong>[[medicalHistory.outcome]]
+	            <p><strong>Visit date:</strong> [[medicalHistory.visit_date]]</p>
+	            <p><strong>Revisit date:</strong> [[medicalHistory.revisit_date]]</p>
+	            <p><strong>Patient name:</strong> [[medicalHistory.patient_name]]</p>
+	            <p><strong>ICD:</strong> [[medicalHistory.icd_code]]</p>
+	            <p><strong>Outcome:</strong> [[medicalHistory.outcome]]</p>
 	        </div>
 	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	        	<div class="row">
@@ -44,32 +39,29 @@
 	        </div>
 	        <div ng-show="medicalHistory.showMore">
 		        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		            <strong>Prescription by: </strong>[[medicalHistory.prescriptions.doctor_name]]
+		            <strong>Prescription by:</strong> [[medicalHistory.prescriptions.doctor_name]]
 		        </div>
 		        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1" ng-show="medicalHistory.prescriptions.data.length != 0">
 		                <table class="table table-hover">
-		                    <thead>
-		                        <tr>
-		                            <th>Drug name</th>
-		                            <th>Quantity</th>
-		                            <th>Dose</th>
-		                            <th>Notice</th>
-		                        </tr>
-		                    </thead>
 		                    <tbody>
 		                        <tr ng-repeat="prescription in medicalHistory.prescriptions.data">
 		                            <td>
-		                                [[prescription.drug_name]]
-		                            </td>
-		                            <td>
-		                                [[prescription.quantity]]
-		                            </td>
-		                            <td>
-		                                [[prescription.dose]]
-		                            </td>
-		                            <td>
-		                                [[prescription.notice]]
+	                                	<p>
+		                                	<strong>Drug name:</strong> [[prescription.drug_name]]
+	                                	</p>
+	                                	<p>
+		                                	<strong>Notice:</strong> [[prescription.notice]]
+	                                	</p>
+	                                	<p>
+		                                	<strong>Quantity:</strong> [[prescription.quantity]]
+	                                	</p>
+		                            	<ul class="list-inline">
+		                                	<li><strong>Morning:</strong> [[prescription.morning]]</li>
+		                                	<li><strong>Noon:</strong> [[prescription.noon]]</li>
+		                                	<li><strong>Afternoon:</strong> [[prescription.afternoon]]</li>
+		                                	<li><strong>Evening:</strong> [[prescription.evening]]</li>
+		                                </ul>
 		                            </td>
 		                        </tr>
 		                    </tbody>
@@ -77,7 +69,7 @@
 		            </div>
 		        </div>
 		    	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		    		<strong>Lab order by: </strong>[[medicalHistory.lab_orders.doctor_name]]
+		    		<strong>Lab order by:</strong> [[medicalHistory.lab_orders.doctor_name]]
 		        </div>
 		        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1" ng-show="medicalHistory.lab_orders.data.length != 0">
@@ -98,7 +90,7 @@
 		            </div>
 		        </div>
 		    	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		    		<strong>Service type: </strong>[[medicalHistory.services.service_type]]
+		    		<strong>Service type:</strong> [[medicalHistory.services.service_type]]
 		        </div>
 		        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1" ng-show="medicalHistory.services.data.length != 0">
@@ -127,7 +119,7 @@
     </div>
     
     <!-- Create form -->
-    <form class="form-horizontal" ng-show="create.toggle">
+    <form class="form-horizontal" ng-show="create.toggle" ng-submit="createSubmit()">
 		<legend>Create form</legend>
 		<!-- Visit Date -->
 		<div class="form-group">
@@ -178,7 +170,10 @@
 						<tr>
 							<th>Drug name</th>
 							<th>Quantity</th>
-							<th>Dose</th>
+							<th>Morning</th>
+							<th>Noon</th>
+							<th>Afternoon</th>
+							<th>Evening</th>
 							<th>Notice</th>
 							<th></th>
 						</tr>
@@ -195,6 +190,7 @@
 							</td>
 							<td>
 								<inputie 
+									type="number"
 									data="prescription.quantity" 
 									place-holder="Enter quantity" 
 									edit-mode="prescription.editMode">
@@ -202,13 +198,39 @@
 							</td>
 							<td>
 								<inputie 
-									data="prescription.dose" 
-									place-holder="Enter dose" 
+									type="number"
+									data="prescription.morning" 
+									place-holder="Enter quantity" 
 									edit-mode="prescription.editMode">
 								</inputie>
 							</td>
 							<td>
 								<inputie 
+									type="number"
+									data="prescription.noon" 
+									place-holder="Enter quantity" 
+									edit-mode="prescription.editMode">
+								</inputie>
+							</td>
+							<td>
+								<inputie 
+									type="number"
+									data="prescription.afternoon" 
+									place-holder="Enter quantity" 
+									edit-mode="prescription.editMode">
+								</inputie>
+							</td>
+							<td>
+								<inputie 
+									type="number"
+									data="prescription.evening" 
+									place-holder="Enter quantity" 
+									edit-mode="prescription.editMode">
+								</inputie>
+							</td>
+							<td>
+								<inputie 
+									type="text"
 									data="prescription.notice" 
 									place-holder="Enter notice" 
 									edit-mode="prescription.editMode">
@@ -238,7 +260,10 @@
 						<tr>
 							<th>Drug name</th>
 							<th>Quantity</th>
-							<th>Dose</th>
+							<th>Morning</th>
+							<th>Noon</th>
+							<th>Afternoon</th>
+							<th>Evening</th>
 							<th>Notice</th>
 							<th></th>
 						</tr>
@@ -252,10 +277,19 @@
 									placeholder="Enter drug name">
 							</td>
 							<td>
-								<input type="text" ng-model="create.prescriptions.new.quantity" class="form-control" placeholder="Quantity">
+								<input type="number" ng-model="create.prescriptions.new.quantity" class="form-control" placeholder="Quantity">
 							</td>
 							<td>
-								<input type="text" ng-model="create.prescriptions.new.dose" class="form-control" placeholder="Dose">
+								<input type="number" ng-model="create.prescriptions.new.morning" class="form-control" placeholder="Morning">
+							</td>
+							<td>
+								<input type="number" ng-model="create.prescriptions.new.noon" class="form-control" placeholder="Noon">
+							</td>
+							<td>
+								<input type="number" ng-model="create.prescriptions.new.afternoon" class="form-control" placeholder="Afternoon">
+							</td>
+							<td>
+								<input type="number" ng-model="create.prescriptions.new.evening" class="form-control" placeholder="Evening">
 							</td>
 							<td>
 								<input type="text" ng-model="create.prescriptions.new.notice" class="form-control" placeholder="Notice">
@@ -299,6 +333,7 @@
 						<tr ng-repeat="labOrder in create.lab_orders.data">
 							<td>
 								<inputie 
+									type="text"
 									data="labOrder.result" 
 									place-holder="Enter result" 
 									edit-mode="labOrder.editMode">
@@ -433,18 +468,30 @@
 				<input type="text" class="form-control" ng-model="create.outcome" placeholder="Enter Outcome">
 		    </div>
 		</div>
+		<!-- Revisit Date -->
+		<div class="form-group">
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Revisit date</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+				<div class="input-group date">
+					<input class="datepicker form-control"
+                    ng-model="create.revisit_date" data-date-format="dd/mm/yyyy"
+                    name="revisit datepicker" placeholder="Enter revisit date"/>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+				</div>
+		    </div>
+		</div>
 		<!-- Finish -->
 		<div class="form-group">
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3 text-right">
-				<button type="submit" class="btn btn-info" ng-click="createSubmit()">Finish</button>
-				<button type="submit" class="btn btn-danger" ng-click="create.toggle = false; create.reset()">Cancel</button>
+				<button type="submit" class="btn btn-info">Finish</button>
+				<button type="button" class="btn btn-danger" ng-click="create.toggle = false; create.reset()">Cancel</button>
 		    </div>
 		</div>
 	</form>
 
 	<!-- Edit form -->
-	<form class="form-horizontal" ng-show="edit.toggle">
-		<legend>Edit form</legend>
+	<form class="form-horizontal" ng-show="edit.toggle" ng-submit="updateSubmit()">
+		<legend>Edit form</legend> 
 		<!-- Visit Date -->
 		<div class="form-group">
 		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Date</label>
@@ -494,7 +541,10 @@
 						<tr>
 							<th>Drug name</th>
 							<th>Quantity</th>
-							<th>Dose</th>
+							<th>Morning</th>
+							<th>Noon</th>
+							<th>Afternoon</th>
+							<th>Evening</th>
 							<th>Notice</th>
 							<th></th>
 						</tr>
@@ -511,6 +561,7 @@
 							</td>
 							<td>
 								<inputie 
+									type="number"
 									data="prescription.quantity" 
 									place-holder="Enter quantity" 
 									edit-mode="prescription.editMode">
@@ -518,13 +569,39 @@
 							</td>
 							<td>
 								<inputie 
-									data="prescription.dose" 
-									place-holder="Enter dose" 
+									type="number"
+									data="prescription.morning" 
+									place-holder="Enter quantity" 
 									edit-mode="prescription.editMode">
 								</inputie>
 							</td>
 							<td>
 								<inputie 
+									type="number"
+									data="prescription.noon" 
+									place-holder="Enter quantity" 
+									edit-mode="prescription.editMode">
+								</inputie>
+							</td>
+							<td>
+								<inputie 
+									type="number"
+									data="prescription.afternoon" 
+									place-holder="Enter quantity" 
+									edit-mode="prescription.editMode">
+								</inputie>
+							</td>
+							<td>
+								<inputie 
+									type="number"
+									data="prescription.evening" 
+									place-holder="Enter quantity" 
+									edit-mode="prescription.editMode">
+								</inputie>
+							</td>
+							<td>
+								<inputie 
+									type="text"
 									data="prescription.notice" 
 									place-holder="Enter notice" 
 									edit-mode="prescription.editMode">
@@ -554,7 +631,10 @@
 						<tr>
 							<th>Drug name</th>
 							<th>Quantity</th>
-							<th>Dose</th>
+							<th>Morning</th>
+							<th>Noon</th>
+							<th>Afternoon</th>
+							<th>Evening</th>
 							<th>Notice</th>
 							<th></th>
 						</tr>
@@ -568,10 +648,19 @@
 									placeholder="Enter drug name">
 							</td>
 							<td>
-								<input type="text" ng-model="edit.prescriptions.new.quantity" class="form-control" placeholder="Quantity">
+								<input type="number" ng-model="edit.prescriptions.new.quantity" class="form-control" placeholder="Quantity">
 							</td>
 							<td>
-								<input type="text" ng-model="edit.prescriptions.new.dose" class="form-control" placeholder="Dose">
+								<input type="number" ng-model="edit.prescriptions.new.morning" class="form-control" placeholder="Morning">
+							</td>
+							<td>
+								<input type="number" ng-model="edit.prescriptions.new.noon" class="form-control" placeholder="Noon">
+							</td>
+							<td>
+								<input type="number" ng-model="edit.prescriptions.new.afternoon" class="form-control" placeholder="Afternoon">
+							</td>
+							<td>
+								<input type="number" ng-model="edit.prescriptions.new.evening" class="form-control" placeholder="Evening">
 							</td>
 							<td>
 								<input type="text" ng-model="edit.prescriptions.new.notice" class="form-control" placeholder="Notice">
@@ -615,6 +704,7 @@
 						<tr ng-repeat="labOrder in edit.lab_orders.data">
 							<td>
 								<inputie 
+									type="text"
 									data="labOrder.result" 
 									place-holder="Enter result" 
 									edit-mode="labOrder.editMode">
@@ -749,11 +839,24 @@
 				<input type="text" class="form-control" ng-model="edit.outcome" placeholder="Enter Outcome">
 		    </div>
 		</div>
+		<!-- Revisit Date -->
+		<div class="form-group">
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3
+                control-label">Revisit date</label>
+		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+				<div class="input-group date">
+					<input class="datepicker form-control"
+                    ng-model="edit.revisit_date" data-date-format="dd/mm/yyyy"
+                    name="revisit datepicker" placeholder="Enter revisit date"/>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+				</div>
+		    </div>
+		</div>
 		<!-- Finish -->
 		<div class="form-group">
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3 text-right">
-				<button type="submit" class="btn btn-info" ng-click="updateSubmit()">Finish</button>
-				<button type="submit" class="btn btn-danger" ng-click="edit.toggle = false;">Cancel</button>
+				<button type="submit" class="btn btn-info">Finish</button>
+				<button type="button" class="btn btn-danger" ng-click="edit.toggle = false;">Cancel</button>
 		    </div>
 		</div>
 	</form>

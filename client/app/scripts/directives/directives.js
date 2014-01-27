@@ -104,9 +104,10 @@ define(['angular'], function(angular) {
 	    		replace : true,
 	    		templateUrl : 'partials/inputie.html',
 	    		scope : {
-	    			data : '=',
-	    			editMode : '=',
-	    			placeHolder : '@'
+	    			type: '@',
+	    			data: '=',
+	    			editMode: '=',
+	    			placeHolder: '@'
 	    		}
 			};
 		}

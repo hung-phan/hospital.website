@@ -55,7 +55,8 @@ create table medical_history_table (
     visit_date text character set utf8 collate utf8_unicode_ci,
     patient_name text character set utf8 collate utf8_unicode_ci,
     icd_code text character set utf8 collate utf8_unicode_ci,
-    outcome text character set utf8 collate utf8_unicode_ci
+    outcome text character set utf8 collate utf8_unicode_ci,
+    revisit_date text character set utf8 collate utf8_unicode_ci
 )
 go
 create table prescription_table (
@@ -64,7 +65,10 @@ create table prescription_table (
     doctor_name text character set utf8 collate utf8_unicode_ci,
     drug_name text character set utf8 collate utf8_unicode_ci,
     quantity int,
-    dose text character set utf8 collate utf8_unicode_ci,
+    morning int,
+    noon int,
+    afternoon int,
+    evening int,
     notice text character set utf8 collate utf8_unicode_ci
 )
 go

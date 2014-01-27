@@ -87,11 +87,11 @@ define([
         'AuthenticationService',
         function($scope, $location, socket, authenticationService) {
             /* create shared template */
-            
+
             if (!authenticationService.authenticateSession()) {
                 $location.path('/');
             }
-            
+
             // connect to server via websocket
             socket.connect();
 
@@ -902,9 +902,10 @@ define([
     ]).controller('MedicalHistoryController', [
         '$scope',
         '$location',
+        '$window',
         '$q',
         'WebSocketService',
-        function($scope, $location, $q, socket) {
+        function($scope, $location, $window, $q, socket) {
 
             var MAX_ITEM_PER_PAGE = 15;
 
@@ -917,10 +918,10 @@ define([
                 }
             }
 
-            function returnObject(object, type) {
+            function returnObject(object, types) {
                 var o = {};
                 for (var p in object) {
-                    if (object.hasOwnProperty(p) && typeof(object[p]) == type) {
+                    if (object.hasOwnProperty(p) && types.indexOf(typeof(object[p])) != -1) {
                         o[p] = object[p];
                     }
                 }
@@ -950,6 +951,18 @@ define([
                     });
                 });
 
+            angular.element("input[name='revisit datepicker']").datepicker({
+                todayBtn: 'linked'
+            })
+                .on('changeDate', function(ev) {
+                    $scope.$apply(function() {
+                        if ($scope.create.toggle) {
+                            $scope.create.revisit_date = ev.currentTarget.value;
+                        } else {
+                            $scope.edit.revisit_date = ev.currentTarget.value;
+                        }
+                    });
+                });
             /* initialize */
             $scope.medicalHistories = [];
             $scope.noElements = 0;
@@ -957,6 +970,7 @@ define([
             $scope.create = {
                 toggle: false,
                 visit_date: '',
+                revisit_date: '',
                 outcome: '',
                 patient_name: '',
                 icd_code: '',
@@ -966,14 +980,18 @@ define([
                     new: {
                         show: false,
                         drug_name: '',
-                        quantity: '',
-                        dose: '',
+                        quantity: 0,
+                        morning: 0,
+                        noon: 0,
+                        afternoon: 0,
+                        evening: 0,
                         notice: '',
                         toggleShow: function() {
                             this.show = !this.show;
                         },
                         reset: function() {
                             fillValue('', this, 'string');
+                            fillValue(0, this, 'number');
                         }
                     }
                 },
@@ -1025,6 +1043,7 @@ define([
             $scope.edit = {
                 toggle: false,
                 visit_date: '',
+                revisit_date: '',
                 outcome: '',
                 patient_name: '',
                 icd_code: '',
@@ -1034,14 +1053,18 @@ define([
                     new: {
                         show: false,
                         drug_name: '',
-                        quantity: '',
-                        dose: '',
+                        quantity: 0,
+                        morning: 0,
+                        noon: 0,
+                        afternoon: 0,
+                        evening: 0,
                         notice: '',
                         toggleShow: function() {
                             this.show = !this.show;
                         },
                         reset: function() {
                             fillValue('', this, 'string');
+                            fillValue(0, this, 'number');
                         }
                     }
                 },
@@ -1098,7 +1121,7 @@ define([
 
             $scope.input = function(dataObject) {
                 /* make edit mode for object */
-                var object = returnObject(dataObject.new, 'string');
+                var object = returnObject(dataObject.new, ['string', 'number']);
                 object.editMode = false;
 
                 /* push the object into data */
@@ -1150,7 +1173,10 @@ define([
                     prescriptionsData.push({
                         drug_name: item.drug_name,
                         quantity: item.quantity,
-                        dose: item.dose,
+                        morning: item.morning,
+                        noon: item.noon,
+                        afternoon: item.afternoon,
+                        evening: item.evening,
                         notice: item.notice
                     });
                 });
@@ -1174,6 +1200,7 @@ define([
                     'method': 'create',
                     'elements': [{
                         visit_date: $scope.create.visit_date,
+                        revisit_date: $scope.create.revisit_date,
                         patient_name: $scope.create.patient_name,
                         icd_code: $scope.create.icd_code,
                         outcome: $scope.create.outcome,
@@ -1236,7 +1263,7 @@ define([
             };
 
             $scope.export = function(medical_history_id) {
-                $location.path('/export');
+                $location.path('/export/' + $scope.medicalHistories[medical_history_id].id);
             };
 
             $scope.filter = function() {
@@ -1282,8 +1309,8 @@ define([
                             }());
                             break;
                         case 'filter':
-                             $scope.noElements = data.noElements;
-                             $scope.medicalHistories = data.elements;
+                            $scope.noElements = data.noElements;
+                            $scope.medicalHistories = data.elements;
                             break;
                         case 'delete':
                             (function() {
@@ -1324,6 +1351,22 @@ define([
                 page: 1,
                 max: MAX_ITEM_PER_PAGE,
             });
+        }
+    ]).controller('ExportController', [
+        '$scope',
+        '$resource',
+        '$routeParams',
+        'AuthenticationService',
+        function($scope, $resource, $routeParams, authenticationService) {
+            /* authentication service */
+            if (!authenticationService.authenticateSession()) {
+                $location.path('/');
+            } else {
+                var service = new $resource('/export');
+                $scope.export = service.get({
+                    medicalHistoryId: $routeParams.medicalHistoryId
+                });
+            }
         }
     ]);
 });

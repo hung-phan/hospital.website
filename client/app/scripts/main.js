@@ -82,6 +82,10 @@ define('main', [], function() {
                     when('/404', {
                         templateUrl: '404.html'
                     }).
+                    when('/export/:medicalHistoryId', {
+                        templateUrl: 'partials/export.html',
+                        controller: 'ExportController'
+                    }).
                     otherwise({
                         redirectTo: '/404'
                     });
