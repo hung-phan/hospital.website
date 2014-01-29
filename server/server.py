@@ -10,6 +10,7 @@ import json
 import os
 from server_database.databaseapi import Database
 from global_handler import GlobalHandler
+from model.medical_histories import export
 
 # Static files directories
 SERVER_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -96,107 +97,8 @@ class ExportHandler(tornado.web.RequestHandler):
 
     def get(self):
         """Get"""
-        medical_history = DB.getOne(
-                'medical_history_table',
-                [
-                    'id',
-                    'visit_date',
-                    'patient_name',
-                    'icd_code',
-                    'outcome',
-                    'revisit_date'
-                ],
-                ('id=%s', [self.get_argument('medicalHistoryId', NO_DATA)])
-            )
-        
-        # return message
-        if medical_history:
-            msg = dict()
-            msg['id'] = medical_history[0]
-            msg['visit_date'] = medical_history[1]
-            msg['patient_name'] = medical_history[2]
-            msg['icd_code'] = medical_history[3]
-            msg['outcome'] = medical_history[4]
-            msg['revisit_date'] = medical_history[5]
-
-            # prescriptions
-            prescriptions = DB.get_database().getAll(
-                'prescription_table',
-                [
-                    'id',
-                    'medical_history_id',
-                    'doctor_name',
-                    'drug_name',
-                    'quantity',
-                    'morning',
-                    'noon',
-                    'afternoon',
-                    'evening',
-                    'notice'
-                ],
-                ('medical_history_id=%s', [medical_history[0]])
-            )
-
-            medical_history['prescriptions'] = dict()
-            medical_history['prescriptions']['data'] = list()
-
-            if prescriptions:
-                for detail in prescriptions:
-                    element = dict()
-                    element['id'] = detail[0]
-                    medical_history['prescriptions'][
-                        'doctor_name'] = detail[2]
-                    element['drug_name'] = detail[3]
-                    element['quantity'] = detail[4]
-                    element['morning'] = detail[5]
-                    element['noon'] = detail[6]
-                    element['afternoon'] = detail[7]
-                    element['evening'] = detail[8]
-                    element['notice'] = detail[9]
-                    medical_history['prescriptions']['data'].append(element)
-
-            # labaratories
-            labaratory_orders = self.database.get_database().getAll(
-                'labaratory_order_table',
-                self.lab_order_args_list,
-                ('medical_history_id=%s', [_element[0]])
-            )
-
-            medical_history['lab_orders'] = dict()
-            medical_history['lab_orders']['data'] = list()
-
-            if labaratory_orders:
-                for detail in labaratory_orders:
-                    element = dict()
-                    element['id'] = detail[0]
-                    medical_history['lab_orders']['doctor_name'] = detail[2]
-                    element['result'] = detail[3]
-                    medical_history['lab_orders']['data'].append(element)
-
-            # services
-            services = self.database.get_database().getAll(
-                'service_table',
-                self.service_args_list,
-                ('medical_history_id=%s', [_element[0]])
-            )
-
-            medical_history['services'] = dict()
-            medical_history['services']['data'] = list()
-
-            if services:
-                for detail in services:
-                    element = dict()
-                    element['id'] = detail[0]
-                    medical_history['services']['service_type'] = detail[2]
-                    element['medical_service_name'] = detail[3]
-                    medical_history['services']['data'].append(element)
-
-            msg['elements'].append(medical_history)
-
         self.write(json.dumps(
-            {
-                'Dummy': '%s' % medical_history_id
-            }
+            export(DB, self.get_argument('medicalHistoryId', NO_DATA))
         ))
 
     def on_complete(self):

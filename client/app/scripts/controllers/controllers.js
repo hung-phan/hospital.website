@@ -93,7 +93,9 @@ define([
             }
 
             // connect to server via websocket
-            socket.connect();
+            if (!socket.isConnected) {
+                socket.connect();
+            }
 
             $scope.logout = function() {
                 authenticationService.logoutSession();
@@ -973,7 +975,9 @@ define([
                 revisit_date: '',
                 outcome: '',
                 patient_name: '',
+                patient_id: 0,
                 icd_code: '',
+                icd_id: 0,
                 prescriptions: {
                     doctor_name: '',
                     data: [],
@@ -1025,6 +1029,7 @@ define([
                 },
                 reset: function() {
                     fillValue('', this, 'string');
+                    fillValue(0, this, 'number');
 
                     fillValue('', this.prescriptions, 'string');
                     this.prescriptions.new.show = false;
@@ -1046,7 +1051,9 @@ define([
                 revisit_date: '',
                 outcome: '',
                 patient_name: '',
+                patient_id: 0,
                 icd_code: '',
+                icd_id: 0,
                 prescriptions: {
                     doctor_name: '',
                     data: [],
@@ -1098,6 +1105,7 @@ define([
                 },
                 reset: function() {
                     fillValue('', this, 'string');
+                    fillValue(0, this, 'number');
 
                     fillValue('', this.prescriptions, 'string');
                     this.prescriptions.new.show = false;
@@ -1202,7 +1210,9 @@ define([
                         visit_date: $scope.create.visit_date,
                         revisit_date: $scope.create.revisit_date,
                         patient_name: $scope.create.patient_name,
+                        patient_id: $scope.create.patient_id,
                         icd_code: $scope.create.icd_code,
+                        icd_id: $scope.create.icd_id,
                         outcome: $scope.create.outcome,
                         prescriptions: {
                             doctor_name: $scope.create.prescriptions.doctor_name,

@@ -1,8 +1,8 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-            <h4><strong>Hospital name</strong></h4>
-            <h3><strong>Prescription</strong></h3>
+            <h4><strong>Phong Kham Da Khoa Phuoc An Da Lat</strong></h4>
+            <h3><strong>Don thuoc</strong></h3>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
@@ -35,7 +35,7 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="row" ng-repeat="prescription in export.prescriptions.data">
                     <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
-                        <strong>[[$index + 1]] [[prescription.drug_name]]</strong>
+                        <strong>[[$index + 1]]:</strong> [[prescription.drug_name]]
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-right"><strong>Quantity:</strong> [[prescription.quantity]]</div>
                     <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
@@ -52,27 +52,10 @@
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <strong>Lab orders by:</strong> [[export.lab_orders.doctor_name]]
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="row" ng-repeat="lab_order in export.lab_orders.data">
-                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
-                        <strong>[[$index + 1]] Result:</strong> [[lab_order.result]]
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <strong>Service type:</strong> [[export.services.service_type]]
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="row" ng-repeat="service in export.services.data">
-                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
-                        <strong>[[$index + 1]] [[service.medical_service_name]]</strong>
-                    </div>
-                </div>
-                <strong>Revisit date:</strong> [[export.revisit_data]]</br>
+                <strong>Revisit date:</strong> [[export.revisit_date]]</br>
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xs-offset-6 col-sm-offset-6 col-md-offset-6 col-lg-offset-6 text-center">
+                        <p>[[export.visit_date]]</p>
                         <strong>Doctor's signature</strong>
                     </div>
                 </div>

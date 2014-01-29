@@ -13,7 +13,9 @@ class MedicalHistory:
             'id',
             'visit_date',
             'patient_name',
+            'patient_id',
             'icd_code',
+            'icd_id',
             'outcome',
             'revisit_date'
         ]
@@ -67,9 +69,11 @@ class MedicalHistory:
                 medical_history['id'] = _element[0]
                 medical_history['visit_date'] = _element[1]
                 medical_history['patient_name'] = _element[2]
-                medical_history['icd_code'] = _element[3]
-                medical_history['outcome'] = _element[4]
-                medical_history['revisit_date'] = _element[5]
+                medical_history['patient_id'] = _element[3]
+                medical_history['icd_code'] = _element[4]
+                medical_history['icd_id'] = _element[5]
+                medical_history['outcome'] = _element[6]
+                medical_history['revisit_date'] = _element[7]
 
                 # prescriptions
                 prescriptions = self.database.get_database().getAll(
@@ -146,7 +150,9 @@ class MedicalHistory:
             {
                 'visit_date': element['visit_date'],
                 'patient_name': element['patient_name'],
+                'patient_id': element['patient_id'],
                 'icd_code': element['icd_code'],
+                'icd_id': element['icd_id'],
                 'outcome': element['outcome'],
                 'revisit_date': element['revisit_date']
             }
@@ -200,7 +206,9 @@ class MedicalHistory:
             'id': medical_history_id,
             'visit_date': element['visit_date'],
             'patient_name': element['patient_name'],
+            'patient_id': element['patient_id'],
             'icd_code': element['icd_code'],
+            'icd_id': element['icd_id'],
             'outcome': element['outcome'],
             'revisit_date': element['revisit_date'],
             'prescriptions': {
@@ -229,7 +237,9 @@ class MedicalHistory:
             {
                 'visit_date': element['visit_date'],
                 'patient_name': element['patient_name'],
+                'patient_id': element['patient_id'],
                 'icd_code': element['icd_code'],
+                'icd_id': element['icd_id'],
                 'outcome': element['outcome'],
                 'revisit_date': element['revisit_date']
             },
@@ -349,7 +359,9 @@ class MedicalHistory:
             'id': element['id'],
             'visit_date': element['visit_date'],
             'patient_name': element['patient_name'],
+            'patient_id': element['patient_id'],
             'icd_code': element['icd_code'],
+            'icd_id': element['icd_id'],
             'outcome': element['outcome'],
             'revisit_date': element['revisit_date'],
             'prescriptions': {
@@ -425,9 +437,11 @@ class MedicalHistory:
                 medical_history['id'] = _element[0]
                 medical_history['visit_date'] = _element[1]
                 medical_history['patient_name'] = _element[2]
-                medical_history['icd_code'] = _element[3]
-                medical_history['outcome'] = _element[4]
-                medical_history['outcome'] = _element[5]
+                medical_history['patient_id'] = _element[3]
+                medical_history['icd_code'] = _element[4]
+                medical_history['icd_id'] = _element[5]
+                medical_history['outcome'] = _element[6]
+                medical_history['revisit_date'] = _element[7]
 
                 # prescriptions
                 prescriptions = self.database.get_database().getAll(
@@ -717,3 +731,92 @@ def remove_from_database(database, table, ids):
             table,
             ('id=%s', [element])
         )
+
+def export(database, medical_history_id):
+    """Query medical history by the given id"""
+    medical_history = database.get_database().getOne(
+        'medical_history_table',
+        [
+            'id',
+            'visit_date',
+            'patient_name',
+            'patient_id',
+            'icd_code',
+            'icd_id',
+            'outcome',
+            'revisit_date'
+        ],
+        ('id=%s', [medical_history_id]),
+    )
+
+    patient = database.get_database().getOne('patient_table',
+        [
+            'age',
+            'gender',
+            'address',
+            'phone_number'
+        ],
+        ('id=%s', medical_history[3])
+    )
+
+    icd = database.get_database().getOne('icd_table',
+        ['name'],
+        ('id=%s', medical_history[5])
+    )
+
+    # return message
+    if medical_history:
+        msg = dict()
+        msg['id'] = medical_history[0]
+        msg['visit_date'] = medical_history[1]
+        msg['patient_name'] = medical_history[2]
+        if patient:
+            msg['age'] = patient[0]
+            msg['gender'] = patient[1]
+            msg['address'] = patient[2]
+            msg['phone'] = patient[3]
+        msg['icd_code'] = medical_history[4]
+        if icd:
+            msg['icd_name'] = icd[0]
+        msg['outcome'] = medical_history[6]
+        msg['revisit_date'] = medical_history[7]
+
+        # prescriptions
+        prescriptions = database.get_database().getAll(
+            'prescription_table',
+            [
+                'id',
+                'medical_history_id',
+                'doctor_name',
+                'drug_name',
+                'quantity',
+                'morning',
+                'noon',
+                'afternoon',
+                'evening',
+                'notice'
+            ],
+            ('medical_history_id=%s', [medical_history[0]])
+        )
+
+        msg['prescriptions'] = dict()
+        msg['prescriptions']['data'] = list()
+
+        if prescriptions:
+            for detail in prescriptions:
+                element = dict()
+                msg['prescriptions'][
+                    'doctor_name'] = detail[2]
+                element['drug_name'] = detail[3]
+                element['quantity'] = detail[4]
+                element['morning'] = detail[5]
+                element['noon'] = detail[6]
+                element['afternoon'] = detail[7]
+                element['evening'] = detail[8]
+                element['notice'] = detail[9]
+                msg['prescriptions']['data'].append(element)
+
+        return msg
+    else:
+        return dict()
+

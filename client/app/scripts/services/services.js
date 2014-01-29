@@ -41,6 +41,7 @@ define([
             var service = {
                 websocket: undefined,
                 logout: false,
+                isConnected: false,
                 connect: function() {
                     try{
                         var url = 'ws://localhost:8000/home', self = this;
@@ -48,11 +49,13 @@ define([
                         this.websocket = (window.MozWebSocket) ? new MozWebSocket(url) : new WebSocket(url);
                         this.websocket.onopen = function() { alertify.success('WebSocket is opened'); };
                         this.websocket.onclose = function() { 
+                            self.isConnected = false;
                             self.reconnect();
                         };
                         this.websocket.onmessage = function(message) {
                             self.callback(message.data);
                         };
+                        this.isConnected = true;
                     } catch (error) {
                         this.reconnect();
                     }
@@ -67,6 +70,7 @@ define([
                 disconnect: function() {
                     this.logout = true;
                     this.websocket.close();
+                    this.isConnected = false;
                     alertify.success('Logout success');
                 },
                 callback : function(message) { },

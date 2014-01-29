@@ -138,6 +138,7 @@
 				<input type="text" class="form-control" 
 					ng-model="create.patient_name"
 					typeahead="patient.name for patient in getPatients($viewValue) | filter:$viewValue"
+					typeahead-on-select="create.patient_id = $item.id"
 					placeholder="Enter patient name">
 		    </div>
 		</div>
@@ -149,6 +150,7 @@
 					ng-model="create.icd_code"
 					typeahead-template-url="partials/icd-typeahead-template.html"
 					typeahead="icd.code for icd in getICDs($viewValue) | filter:$viewValue"
+					typeahead-on-select="create.icd_id = $item.id"
 					placeholder="Enter ICD">
 		    </div>
 		</div>
@@ -509,6 +511,7 @@
 				<input type="text" class="form-control" 
 					ng-model="edit.patient_name"
 					typeahead="patient.name for patient in getPatients($viewValue) | filter:$viewValue"
+					typeahead-on-select="edit.patient_id = $item.id"
 					placeholder="Enter patient name">
 		    </div>
 		</div>
@@ -520,6 +523,7 @@
 					ng-model="edit.icd_code"
 					typeahead-template-url="partials/icd-typeahead-template.html"
 					typeahead="icd.code for icd in getICDs($viewValue) | filter:$viewValue"
+					typeahead-on-select="edit.icd_id = $item.id"
 					placeholder="Enter ICD">
 		    </div>
 		</div>

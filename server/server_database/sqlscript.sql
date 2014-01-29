@@ -54,7 +54,9 @@ create table medical_history_table (
     id int primary key auto_increment,
     visit_date text character set utf8 collate utf8_unicode_ci,
     patient_name text character set utf8 collate utf8_unicode_ci,
+    patient_id int,
     icd_code text character set utf8 collate utf8_unicode_ci,
+    icd_id int,
     outcome text character set utf8 collate utf8_unicode_ci,
     revisit_date text character set utf8 collate utf8_unicode_ci
 )
