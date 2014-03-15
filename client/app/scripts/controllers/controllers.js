@@ -602,7 +602,6 @@ define([
             $scope.new = {
                 name: '',
                 unit: '',
-                price: '',
                 reset: function() {
                     for (var prop in this) {
                         if (this.hasOwnProperty(prop) &&
@@ -616,8 +615,7 @@ define([
             $scope.current = {
                 id: -1,
                 name: '',
-                unit: '',
-                price: ''
+                unit: ''
             };
 
             /* init web socket */
@@ -681,8 +679,7 @@ define([
                         method: 'create',
                         elements: [{
                             name: $scope.new.name,
-                            unit: $scope.new.unit,
-                            price: $scope.new.price
+                            unit: $scope.new.unit
                         }]
                     });
                 }
@@ -1019,11 +1016,13 @@ define([
                     new: {
                         show: false,
                         medical_service_name: '',
+                        medical_service_id: 0,
                         toggleShow: function() {
                             this.show = !this.show;
                         },
                         reset: function() {
                             fillValue('', this, 'string');
+                            fillValue(0, this, 'number');
                         }
                     }
                 },
@@ -1095,11 +1094,13 @@ define([
                     new: {
                         show: false,
                         medical_service_name: '',
+                        medical_service_id: 0,
                         toggleShow: function() {
                             this.show = !this.show;
                         },
                         reset: function() {
                             fillValue('', this, 'string');
+                            fillValue(0, this, 'number');
                         }
                     }
                 },
@@ -1199,7 +1200,8 @@ define([
                 var servicesData = [];
                 $scope.create.services.data.forEach(function(item) {
                     servicesData.push({
-                        medical_service_name: item.medical_service_name
+                        medical_service_name: item.medical_service_name,
+                        medical_service_id: item.medical_service_name
                     });
                 });
 
@@ -1274,6 +1276,10 @@ define([
 
             $scope.export = function(medical_history_id) {
                 $location.path('/export/' + $scope.medicalHistories[medical_history_id].id);
+            };
+            
+            $scope.exportService = function(medical_history_id) {
+                $location.path('/export_service/' + $scope.medicalHistories[medical_history_id].id);
             };
 
             $scope.filter = function() {
@@ -1373,6 +1379,22 @@ define([
                 $location.path('/');
             } else {
                 var service = new $resource('/export');
+                $scope.export = service.get({
+                    medicalHistoryId: $routeParams.medicalHistoryId
+                });
+            }
+        }
+    ]).controller('ExportServiceController', [
+        '$scope',
+        '$resource',
+        '$routeParams',
+        'AuthenticationService',
+        function($scope, $resource, $routeParams, authenticationService) {
+            /* authentication service */
+            if (!authenticationService.authenticateSession()) {
+                $location.path('/');
+            } else {
+                var service = new $resource('/export_service');
                 $scope.export = service.get({
                     medicalHistoryId: $routeParams.medicalHistoryId
                 });

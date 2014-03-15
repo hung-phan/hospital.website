@@ -3,15 +3,14 @@
 		<div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
 			<input type="text" class="form-control negative-margin-left" ng-model="query" ng-change="filter()" placeholder="Search ...">
 		</div>
-		<a class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xs-offset-4 col-sm-offset-4 col-md-offset-4 col-lg-offset-4 btn btn-large btn-success" ng-click="toggleCreate()">Create</a>
+		<a class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xs-offset-4 col-sm-offset-4 col-md-offset-4 col-lg-offset-4 btn btn-large btn-success" ng-click="toggleCreate()">Tạo mới</a>
 	</div>
 	<div class="row">
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th>Name</th>
-					<th>Unit</th>
-					<th>Price</th>
+					<th>Tên thuốc</th>
+					<th>Loại</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -19,7 +18,6 @@
 				<tr ng-repeat="drug in drugs" ng-dblclick="toggleEdit(drug.id)">
 					<td>[[drug.name]]</td>
 					<td>[[drug.unit]]</td>
-					<td>[[drug.price | numberFilter]]</td>
 					<td>
 						<ul class="list-inline">
 							<li><a class="black-color" ng-click="toggleEdit(drug.id)">
@@ -40,14 +38,13 @@
     	<form class="form-horizontal" ng-submit="update(current.id)">
     		<div class="modal-dialog">
     			<div class="modal-content">
-				    <div class="modal-header">
+				    <div class="modal-Teheader">
 					    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					    <h3>Edit information</h3>
+					    <h3>Thay đổi thông tin</h3>
 				    </div>
 				    <div class="modal-body">
-						<zippy label="Name" value="current.name"></zippy>
-						<zippy label="Unit" value="current.unit"></zippy>
-						<zippy-number label="Price" value="current.price"></zippy>
+						<zippy label="Tên thuốc" value="current.name"></zippy>
+						<zippy label="Loại" value="current.unit"></zippy>
 				    </div>
 				    <div class="modal-footer">
 					    <a class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</a>
@@ -64,12 +61,11 @@
     			<div class="modal-content">
 				    <div class="modal-header">
 					    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					    <h3>Create information</h3>
+					    <h3>Tạo mới thông tin</h3>
 				    </div>
 				    <div class="modal-body">
-						<zippy label="Name" value="new.name"></zippy>
-						<zippy label="Unit" value="new.unit"></zippy>
-						<zippy-number label="Price" value="new.price"></zippy-number>
+						<zippy label="Tên thuốc" value="new.name"></zippy>
+						<zippy label="Loại" value="new.unit"></zippy>
 				    </div>
 				    <div class="modal-footer">
 					    <a class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</a>

@@ -59,8 +59,7 @@ class GlobalHandler(Observable):
             [
                 'id',
                 'name',
-                'unit',
-                'price'
+                'unit'
             ],
             self.database
         )

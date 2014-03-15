@@ -5,6 +5,7 @@ from simplemysql import SimpleMysql
 import os
 import random
 import encryption
+import re
 
 
 class Database:
@@ -24,8 +25,10 @@ class Database:
         self.db.query('SET NAMES utf8;')
         self.db.query('SET CHARACTER SET utf8;')
         self.db.query('SET character_set_connection=utf8;')
-
-        if self.db.getOne('user_table', ['username']) is None:
+        try:
+            self.db.getOne('user_table', ['username'])
+            print 'Database working'
+        except Exception:
             print 'Create new database'
             sql_file = open(
                 os.path.join(
@@ -44,9 +47,7 @@ class Database:
                     sql_query = sql_query + line
             sql_file.close()
             self.register_user('admin', 'admin', 'admin', 'secret')
-        else:
-            print 'Database working'
-        self.commit()
+            self.commit()
 
     def commit(self):
         """Commit"""
@@ -116,3 +117,27 @@ class Database:
 
     def get_database(self):
         return self.db
+
+    def input_drug(self):
+        sql_file = open(
+            os.path.join(
+                os.path.dirname(
+                    os.path.abspath(__file__)
+                ),
+                'drug.txt'
+            ), 'r'
+        )
+        for line in sql_file:
+            li = re.compile("--").split(line)
+            self.db.insert('drug_table',
+                {
+                    'name': li[0],
+                    'unit': li[1]
+                }        
+            )
+        sql_file.close()
+        self.commit() 
+
+#if __name__ == '__main__':
+    #DB = Database('localhost', 'root', 'admin', 'hospital_schema')
+    #DB.input_drug()

@@ -40,8 +40,7 @@ go
 create table drug_table (
     id int primary key auto_increment,
     name text character set utf8 collate utf8_unicode_ci,
-    unit text character set utf8 collate utf8_unicode_ci,
-    price float
+    unit text character set utf8 collate utf8_unicode_ci
 )
 go
 create table icd_table (
@@ -85,6 +84,7 @@ create table service_table (
     id int primary key auto_increment,
     medical_history_id int,
     service_type text character set utf8 collate utf8_unicode_ci,
-    medical_service_name text character set utf8 collate utf8_unicode_ci
+    medical_service_name text character set utf8 collate utf8_unicode_ci,
+    medical_service_id int
 )
 go

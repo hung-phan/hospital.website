@@ -11,6 +11,7 @@ import os
 from server_database.databaseapi import Database
 from global_handler import GlobalHandler
 from model.medical_histories import export
+from model.medical_histories import export_service
 
 # Static files directories
 SERVER_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -19,7 +20,7 @@ CLIENT_DIR = os.path.join(ROOT_DIR, "client/dist")
 PARTIAL_DIR = os.path.join(CLIENT_DIR, "partials")
 
 # Database
-DB = Database('localhost', 'root', 'ttgr5678', 'hospital_schema')
+DB = Database('localhost', 'root', 'admin', 'hospital_schema')
 NO_DATA = 'No data'
 
 
@@ -106,6 +107,20 @@ class ExportHandler(tornado.web.RequestHandler):
         self.write('Export handling')
         self.finish()
 
+class ExportServiceHandler(tornado.web.RequestHandler):
+
+    """Export Handler"""
+
+    def get(self):
+        """Get"""
+        self.write(json.dumps(
+            export_service(DB, self.get_argument('medicalHistoryId', NO_DATA))
+        ))
+
+    def on_complete(self):
+        """On complete funtion"""
+        self.write('Export handling')
+        self.finish()
 
 class Home(tornado.websocket.WebSocketHandler):
 
@@ -140,6 +155,7 @@ def main():
         (r"/login", LoginHandler),
         (r"/create-account", CreateAccountHandler),
         (r"/export", ExportHandler),
+        (r"/export_service", ExportServiceHandler),
         (r"/home", Home),
         (r"/template/(.*)", tornado.web.StaticFileHandler,
             {"path": os.path.join(CLIENT_DIR, "template")}),

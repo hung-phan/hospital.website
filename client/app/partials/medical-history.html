@@ -3,26 +3,26 @@
 		<div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
 			<input type="text" class="form-control negative-margin-left" ng-model="query" ng-change="filter()" placeholder="Search ...">
 		</div>
-		<a class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xs-offset-4 col-sm-offset-4 col-md-offset-4 col-lg-offset-4 btn btn-large btn-success" ng-click="create.toggle = true; edit.toggle = false">Create</a>
+		<a class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xs-offset-4 col-sm-offset-4 col-md-offset-4 col-lg-offset-4 btn btn-large btn-success" ng-click="create.toggle = true; edit.toggle = false">Tạo mới</a>
 	</div>
 	<!-- Display form -->
 	<div class="row">
 	    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 my-well" ng-repeat="medicalHistory in medicalHistories" ng-hide="create.toggle || edit.toggle">
 	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	            <p><strong>Visit date:</strong> [[medicalHistory.visit_date]]</p>
-	            <p><strong>Revisit date:</strong> [[medicalHistory.revisit_date]]</p>
-	            <p><strong>Patient name:</strong> [[medicalHistory.patient_name]]</p>
+	            <p><strong>Ngày khám:</strong> [[medicalHistory.visit_date]]</p>
+	            <p><strong>Ngày hẹn tái khám:</strong> [[medicalHistory.revisit_date]]</p>
+	            <p><strong>Tên bệnh nhân:</strong> [[medicalHistory.patient_name]]</p>
 	            <p><strong>ICD:</strong> [[medicalHistory.icd_code]]</p>
-	            <p><strong>Outcome:</strong> [[medicalHistory.outcome]]</p>
+	            <p><strong>Kết quả:</strong> [[medicalHistory.outcome]]</p>
 	        </div>
 	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	        	<div class="row">
-	        		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+	        		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 			        	<a class="lead" ng-click="medicalHistory.showMore = !medicalHistory.showMore">
 			        		[[medicalHistory.showMore && 'Show less' || 'Show more']]
 			        	</a>
 	        		</div>
-	        		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+	        		<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-right">
 			        	<ul class="list-inline">
 							<li><a class="btn btn-large btn-primary" ng-click="edit.toggle = true; editRecord($index)">
 								<span class="glyphicon glyphicon-pencil"></span>
@@ -33,13 +33,16 @@
 							<li><a class="btn btn-large btn-primary" ng-click="export($index)">
 								<span class="glyphicon glyphicon-share-alt"></span>
 							</a></li>
+                            <li><a class="btn btn-large btn-primary" ng-click="exportService($index)">
+								<span class="glyphicon glyphicon-thumbs-up"></span>
+							</a></li>
 						</ul>
 	        		</div>
 	        	</div>
 	        </div>
 	        <div ng-show="medicalHistory.showMore">
 		        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		            <strong>Prescription by:</strong> [[medicalHistory.prescriptions.doctor_name]]
+		            <strong>Bác sĩ kê đơn:</strong> [[medicalHistory.prescriptions.doctor_name]]
 		        </div>
 		        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1" ng-show="medicalHistory.prescriptions.data.length != 0">
@@ -48,19 +51,19 @@
 		                        <tr ng-repeat="prescription in medicalHistory.prescriptions.data">
 		                            <td>
 	                                	<p>
-		                                	<strong>Drug name:</strong> [[prescription.drug_name]]
+		                                	<strong>Tên thuốc:</strong> [[prescription.drug_name]]
 	                                	</p>
 	                                	<p>
-		                                	<strong>Notice:</strong> [[prescription.notice]]
+		                                	<strong>Chú ý:</strong> [[prescription.notice]]
 	                                	</p>
 	                                	<p>
-		                                	<strong>Quantity:</strong> [[prescription.quantity]]
+		                                	<strong>Số lượng:</strong> [[prescription.quantity]]
 	                                	</p>
 		                            	<ul class="list-inline">
-		                                	<li><strong>Morning:</strong> [[prescription.morning]]</li>
-		                                	<li><strong>Noon:</strong> [[prescription.noon]]</li>
-		                                	<li><strong>Afternoon:</strong> [[prescription.afternoon]]</li>
-		                                	<li><strong>Evening:</strong> [[prescription.evening]]</li>
+		                                	<li><strong>Sáng:</strong> [[prescription.morning]]</li>
+		                                	<li><strong>Trưa:</strong> [[prescription.noon]]</li>
+		                                	<li><strong>Chiều:</strong> [[prescription.afternoon]]</li>
+		                                	<li><strong>Tối:</strong> [[prescription.evening]]</li>
 		                                </ul>
 		                            </td>
 		                        </tr>
@@ -69,14 +72,14 @@
 		            </div>
 		        </div>
 		    	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		    		<strong>Lab order by:</strong> [[medicalHistory.lab_orders.doctor_name]]
+		    		<strong>Người xét nghiệm:</strong> [[medicalHistory.lab_orders.doctor_name]]
 		        </div>
 		        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1" ng-show="medicalHistory.lab_orders.data.length != 0">
 		                <table class="table table-hover">
 		                    <thead>
 		                        <tr>
-		                            <th>Result</th>
+		                            <th>Kết quả</th>
 		                        </tr>
 		                    </thead>
 		                    <tbody>
@@ -90,14 +93,14 @@
 		            </div>
 		        </div>
 		    	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		    		<strong>Service type:</strong> [[medicalHistory.services.service_type]]
+		    		<strong>Loại dịch vụ:</strong> [[medicalHistory.services.service_type]]
 		        </div>
 		        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1" ng-show="medicalHistory.services.data.length != 0">
 		                <table class="table table-hover">
 		                    <thead>
 		                        <tr>
-		                            <th>Medical service</th>
+		                            <th>Dịch vụ y tế</th>
 		                        </tr>
 		                    </thead>
 		                    <tbody>
@@ -120,10 +123,10 @@
     
     <!-- Create form -->
     <form class="form-horizontal" ng-show="create.toggle" ng-submit="createSubmit()">
-		<legend>Create form</legend>
+		<legend>Tạo bệnh sử</legend>
 		<!-- Visit Date -->
 		<div class="form-group">
-		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Date</label>
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Ngày khám</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<div class="input-group date">
 					<input class="datepicker form-control" ng-model="create.visit_date" data-date-format="dd/mm/yyyy" name="datepicker" placeholder="Enter visit date"/>
@@ -133,7 +136,7 @@
 		</div>
 		<!-- Patient Name -->
 		<div class="form-group">
-		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Patient Name</label>
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Tên bệnh nhân</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="create.patient_name"
@@ -156,7 +159,7 @@
 		</div>
 		<!-- Prescribe by -->
 		<div class="form-group">
-			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Prescribed by</label>
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Bác sĩ kê đơn</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="create.prescriptions.doctor_name"
@@ -170,13 +173,13 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>Drug name</th>
-							<th>Quantity</th>
-							<th>Morning</th>
-							<th>Noon</th>
-							<th>Afternoon</th>
-							<th>Evening</th>
-							<th>Notice</th>
+							<th>Tên thuốc</th>
+							<th>Số lượng</th>
+							<th>Sáng</th>
+							<th>Trưa</th>
+							<th>Chiều</th>
+							<th>Tối</th>
+							<th>Chú ý</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -260,13 +263,13 @@
 		    	<table class="table" ng-show="create.prescriptions.new.show">
 					<thead>
 						<tr>
-							<th>Drug name</th>
-							<th>Quantity</th>
-							<th>Morning</th>
-							<th>Noon</th>
-							<th>Afternoon</th>
-							<th>Evening</th>
-							<th>Notice</th>
+							<th>Tên thuốc</th>
+							<th>Số lượng</th>
+							<th>Sáng</th>
+							<th>Trưa</th>
+							<th>Chiều</th>
+							<th>Tối</th>
+							<th>Chú ý</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -313,7 +316,7 @@
 		</div>
 		<!-- Lab Order by -->
 		<div class="form-group">
-			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Lab Order by</label>
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Người xét nghiệm</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="create.lab_orders.doctor_name"
@@ -327,7 +330,7 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>Result</th>
+							<th>Kết quả</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -363,7 +366,7 @@
 		    	<table class="table" ng-show="create.lab_orders.new.show">
 					<thead>
 						<tr>
-							<th>Result</th>
+							<th>Kết quả</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -389,7 +392,7 @@
 		</div>
 		<!-- Service type -->
 		<div class="form-group">
-		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Service type</label>
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Loại dịch vụ</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" ng-model="create.services.service_type" ng-trim="true" placeholder="Enter service type">
 		    </div>
@@ -400,7 +403,7 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>Medical Service</th>
+							<th>Dịch vụ y tế</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -412,6 +415,7 @@
 									ng-show="service.editMode"
 									ng-model="service.medical_service_name"
 									typeahead="medicalService.name for medicalService in getMedicalServices($viewValue) | filter:$viewValue"
+                                    typeahead-on-select="service.medical_service_id = $item.id"
 									placeholder="Enter medical service's name">
 							</td>
 							<td>
@@ -436,7 +440,7 @@
 		    	<table class="table" ng-show="create.services.new.show">
 					<thead>
 						<tr>
-							<th>Service name</th>
+							<th>Dịch vụ y tế</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -446,6 +450,7 @@
 								<input type="text" class="form-control" 
 									ng-model="create.services.new.medical_service_name"
 									typeahead="medicalService.name for medicalService in getMedicalServices($viewValue) | filter:$viewValue"
+                                    typeahead-on-select="create.services.new.medical_service_id = $item.id"
 									placeholder="Enter medical service's name">
 							</td>
 							<td>
@@ -465,14 +470,14 @@
 		</div>
 		<!-- Enter outcome -->
 		<div class="form-group">
-			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Outcome</label>
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Kết quả</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" ng-model="create.outcome" placeholder="Enter Outcome">
 		    </div>
 		</div>
 		<!-- Revisit Date -->
 		<div class="form-group">
-		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Revisit date</label>
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Ngày hẹn tái khám</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<div class="input-group date">
 					<input class="datepicker form-control"
@@ -485,7 +490,7 @@
 		<!-- Finish -->
 		<div class="form-group">
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3 text-right">
-				<button type="submit" class="btn btn-info">Finish</button>
+				<button type="submit" class="btn btn-info">Save</button>
 				<button type="button" class="btn btn-danger" ng-click="create.toggle = false; create.reset()">Cancel</button>
 		    </div>
 		</div>
@@ -493,10 +498,10 @@
 
 	<!-- Edit form -->
 	<form class="form-horizontal" ng-show="edit.toggle" ng-submit="updateSubmit()">
-		<legend>Edit form</legend> 
+		<legend>Thay đổi bệnh sử</legend> 
 		<!-- Visit Date -->
 		<div class="form-group">
-		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Date</label>
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Ngày khám</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<div class="input-group date">
 					<input class="datepicker form-control" ng-model="edit.visit_date" data-date-format="dd/mm/yyyy" name="datepicker" placeholder="Enter visit date"/>
@@ -506,7 +511,7 @@
 		</div>
 		<!-- Patient Name -->
 		<div class="form-group">
-		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Patient Name</label>
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Tên bệnh nhân</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="edit.patient_name"
@@ -529,7 +534,7 @@
 		</div>
 		<!-- Prescribe by -->
 		<div class="form-group">
-			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Prescribed by</label>
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Bác sĩ kê đơn</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="edit.prescriptions.doctor_name"
@@ -543,13 +548,13 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>Drug name</th>
-							<th>Quantity</th>
-							<th>Morning</th>
-							<th>Noon</th>
-							<th>Afternoon</th>
-							<th>Evening</th>
-							<th>Notice</th>
+							<th>Tên thuốc</th>
+							<th>Số lượng</th>
+							<th>Sáng</th>
+							<th>Trưa</th>
+							<th>Chiều</th>
+							<th>Tối</th>
+							<th>Chú ý</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -633,14 +638,14 @@
 		    	<table class="table" ng-show="edit.prescriptions.new.show">
 					<thead>
 						<tr>
-							<th>Drug name</th>
-							<th>Quantity</th>
-							<th>Morning</th>
-							<th>Noon</th>
-							<th>Afternoon</th>
-							<th>Evening</th>
-							<th>Notice</th>
-							<th></th>
+                            <th>Tên thuốc</th>
+							<th>Số lượng</th>
+							<th>Sáng</th>
+							<th>Trưa</th>
+							<th>Chiều</th>
+							<th>Tối</th>
+							<th>Chú ý</th>
+							<th></th> 
 						</tr>
 					</thead>
 					<tbody>
@@ -686,7 +691,7 @@
 		</div>
 		<!-- Lab Order by -->
 		<div class="form-group">
-			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Lab Order by</label>
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Người xét nghiệm</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" 
 					ng-model="edit.lab_orders.doctor_name"
@@ -736,7 +741,7 @@
 		    	<table class="table" ng-show="edit.lab_orders.new.show">
 					<thead>
 						<tr>
-							<th>Result</th>
+							<th>Kết quả</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -762,7 +767,7 @@
 		</div>
 		<!-- Service type -->
 		<div class="form-group">
-		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Service type</label>
+		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Loại dịch vụ</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" ng-model="edit.services.service_type" ng-trim="true" placeholder="Enter service type">
 		    </div>
@@ -773,7 +778,7 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>Medical Service</th>
+							<th>Dịch vụ y tế</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -784,6 +789,7 @@
 								<input type="text" class="form-control" 
 									ng-show="service.editMode"
 									ng-model="service.medical_service_name"
+                                    typeahead-on-select="service.medical_service_id = $item.id"
 									typeahead="medicalService.name for medicalService in getMedicalServices($viewValue) | filter:$viewValue"
 									placeholder="Enter medical service's name">
 							</td>
@@ -809,7 +815,7 @@
 		    	<table class="table" ng-show="edit.services.new.show">
 					<thead>
 						<tr>
-							<th>Service name</th>
+							<th>Dịch vụ y tế</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -818,6 +824,7 @@
 							<td>
 								<input type="text" class="form-control" 
 									ng-model="edit.services.new.medical_service_name"
+                                    typeahead-on-select="edit.services.new.medical_service_id = $item.id"
 									typeahead="medicalService.name for medicalService in getMedicalServices($viewValue) | filter:$viewValue"
 									placeholder="Enter medical service's name">
 							</td>
@@ -838,7 +845,7 @@
 		</div>
 		<!-- Enter outcome -->
 		<div class="form-group">
-			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Outcome</label>
+			<label class="col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label">Kết quả</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<input type="text" class="form-control" ng-model="edit.outcome" placeholder="Enter Outcome">
 		    </div>
@@ -846,7 +853,7 @@
 		<!-- Revisit Date -->
 		<div class="form-group">
 		    <label class="col-xs-3 col-sm-3 col-md-3 col-lg-3
-                control-label">Revisit date</label>
+                control-label">Ngày hẹn tái khám</label>
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
 				<div class="input-group date">
 					<input class="datepicker form-control"
@@ -859,7 +866,7 @@
 		<!-- Finish -->
 		<div class="form-group">
 		    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3 text-right">
-				<button type="submit" class="btn btn-info">Finish</button>
+				<button type="submit" class="btn btn-info">Save</button>
 				<button type="button" class="btn btn-danger" ng-click="edit.toggle = false;">Cancel</button>
 		    </div>
 		</div>

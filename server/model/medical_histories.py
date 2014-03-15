@@ -41,7 +41,8 @@ class MedicalHistory:
             'id',
             'medical_history_id',
             'service_type',
-            'medical_service_name'
+            'medical_service_name',
+            'medical_service_id'
         ]
         self.database = database_
 
@@ -134,6 +135,7 @@ class MedicalHistory:
                         element['id'] = detail[0]
                         medical_history['services']['service_type'] = detail[2]
                         element['medical_service_name'] = detail[3]
+                        element['medical_service_id'] = detail[4]
                         medical_history['services']['data'].append(element)
 
                 msg['elements'].append(medical_history)
@@ -325,7 +327,8 @@ class MedicalHistory:
         for datum in element['services']['data']:
             record = {
                 'service_type': element['services']['service_type'],
-                'medical_service_name': datum['medical_service_name']
+                'medical_service_name': datum['medical_service_name'],
+                'medical_service_id': datum['medical_service_id']
             }
             if datum.has_key('id'):
                 omitted_details.discard(datum['id'])
@@ -384,30 +387,19 @@ class MedicalHistory:
         """Filter data by keyword"""
         filter_condition = filter_value(
             [
-                'medical_history_table.visit_date',
-                'medical_history_table.patient_name',
-                'medical_history_table.icd_code',
-                'medical_history_table.outcome',
-                'medical_history_table.revisit_date',
-                'prescription_table.doctor_name',
-                'labaratory_order_table.doctor_name'
+                'visit_date',
+                'patient_name',
+                'icd_code',
+                'outcome'
             ],
             data['keyword']
         )
 
-        medical_histories = self.leftJoin(
+        medical_histories = self.database.get_database().getAll(
             'medical_history_table',
             self.args_list,
-            (
-                'prescription_table',
-                'labaratory_order_table'
-            ),
-            (
-                'medical_history_table.id = prescription_table.medical_history_id',
-                'medical_history_table.id = labaratory_order_table.medical_history_id'
-            ),
             [filter_condition],
-            ['medical_history_table.id'],
+            ['id'],
             [(data['page'] - 1) * data['max'], data['max']]
         )
 
@@ -416,21 +408,10 @@ class MedicalHistory:
         msg['type'] = self.handler
         msg['method'] = 'filter'
         msg['elements'] = list()
-        elements = self.leftJoin(
+        msg['noElements'] = self.database.get_no_of_elements_filter(
             'medical_history_table',
-            ['id'],
-            (
-                'prescription_table',
-                'labaratory_order_table'
-            ),
-            (
-                'medical_history_table.id = prescription_table.medical_history_id',
-                'medical_history_table.id = labaratory_order_table.medical_history_id'
-            ),
-            [filter_condition],
-            ['medical_history_table.id']
+            filter_condition
         )
-        msg['noElements'] = len(elements) if elements else 0
         if medical_histories:
             for _element in medical_histories:
                 medical_history = dict()
@@ -502,10 +483,10 @@ class MedicalHistory:
                         element['id'] = detail[0]
                         medical_history['services']['service_type'] = detail[2]
                         element['medical_service_name'] = detail[3]
+                        element['medical_service_id'] = detail[4]
                         medical_history['services']['data'].append(element)
 
                 msg['elements'].append(medical_history)
-
         return msg
 
     def delete(self, data):
@@ -541,64 +522,6 @@ class MedicalHistory:
             'id': element['id']
         })
         return msg
-
-    def leftJoin(self, main_table, columns, tables=(), conditions=(),
-                 where=None, group_by=None, limit=None):
-        """Run an inner left join query
-            tables = (table1, table2)
-            fields = ([fields from table1], [fields from table 2])  # fields to select
-            join_fields = (field1, field2)  # fields to join. field1 belongs to table1 and field2 belongs to table 2
-            where = ("parameterizedstatement", [parameters])
-                    eg: ("id=%s and name=%s", [1, "test"])
-            order = [field, ASC|DESC]
-            limit = [limit1, limit2]
-        """
-
-        cur = self._select_join(
-            main_table, columns, tables, conditions, where, group_by, limit)
-        result = cur.fetchall()
-
-        rows = None
-        if result:
-            Row = namedtuple("Row", [f[0] for f in cur.description])
-            rows = [Row(*r) for r in result]
-
-        return rows
-
-    def _select_join(self, main_table, columns, tables=(), conditions=(),
-                     where=None, group_by=None, limit=None):
-        """Run an inner left join query"""
-
-        fields = ['%s.%s' % (main_table, column)
-                  for column in columns]
-        join_fields = ['LEFT JOIN %s ON (%s)' %
-                       (tables[index], conditions[index])
-                       for index in range(len(tables))]
-
-        sql = "SELECT %s FROM %s %s" % \
-            (",".join(fields),
-             main_table,
-             " ".join(join_fields)
-             )
-
-        # where conditions
-        if where and len(where) > 0:
-            sql += " WHERE %s" % where[0]
-
-        # group_by
-        if group_by:
-            sql += " GROUP BY %s" % group_by[0]
-            sql += " ORDER BY %s DESC" % group_by[0]
-
-        # limit
-        if limit:
-            sql += " LIMIT %s" % limit[0]
-
-            if len(limit) > 1:
-                sql += ", %s" % limit[1]
-
-        return self.database.get_database().query(
-            sql, where[1] if where and len(where) > 1 else None)
 
     def patient_lookup(self, data):
         """Look up patient with the given name"""
@@ -743,7 +666,6 @@ def export(database, medical_history_id):
             'patient_id',
             'icd_code',
             'icd_id',
-            'outcome',
             'revisit_date'
         ],
         ('id=%s', [medical_history_id]),
@@ -752,16 +674,14 @@ def export(database, medical_history_id):
     patient = database.get_database().getOne('patient_table',
         [
             'age',
-            'gender',
-            'address',
-            'phone_number'
+            'address'
         ],
-        ('id=%s', medical_history[3])
+        ('id=%s', [medical_history[3]])
     )
 
     icd = database.get_database().getOne('icd_table',
         ['name'],
-        ('id=%s', medical_history[5])
+        ('id=%s', [medical_history[5]])
     )
 
     # return message
@@ -772,14 +692,11 @@ def export(database, medical_history_id):
         msg['patient_name'] = medical_history[2]
         if patient:
             msg['age'] = patient[0]
-            msg['gender'] = patient[1]
-            msg['address'] = patient[2]
-            msg['phone'] = patient[3]
+            msg['address'] = patient[1]
         msg['icd_code'] = medical_history[4]
         if icd:
             msg['icd_name'] = icd[0]
-        msg['outcome'] = medical_history[6]
-        msg['revisit_date'] = medical_history[7]
+        msg['revisit_date'] = medical_history[6]
 
         # prescriptions
         prescriptions = database.get_database().getAll(
@@ -820,3 +737,78 @@ def export(database, medical_history_id):
     else:
         return dict()
 
+def export_service(database, medical_history_id):
+    """Query medical history by the given id"""
+    medical_history = database.get_database().getOne(
+        'medical_history_table',
+        [
+            'id',
+            'visit_date',
+            'patient_name',
+            'patient_id',
+            'icd_code',
+            'icd_id'
+        ],
+        ('id=%s', [medical_history_id]),
+    )
+
+    patient = database.get_database().getOne('patient_table',
+        [
+            'age',
+            'address'
+        ],
+        ('id=%s', [medical_history[3]])
+    )
+
+    icd = database.get_database().getOne('icd_table',
+        ['name'],
+        ('id=%s', [medical_history[5]])
+    )
+
+    # return message
+    if medical_history:
+        msg = dict()
+        msg['id'] = medical_history[0]
+        msg['visit_date'] = medical_history[1]
+        msg['patient_name'] = medical_history[2]
+        if patient:
+            msg['age'] = patient[0]
+            msg['address'] = patient[1]
+        msg['icd_code'] = medical_history[4]
+        if icd:
+            msg['icd_name'] = icd[0]
+
+        # services
+        services = database.get_database().getAll(
+            'service_table',
+            [
+                'id',
+                'medical_history_id',
+                'service_type',
+                'medical_service_name',
+                'medical_service_id'
+            ],
+            ('medical_history_id=%s', [medical_history[0]])
+        )
+
+        msg['services'] = dict()
+        msg['services']['data'] = list()
+
+        if services:
+            for detail in services:
+                element = dict()
+                msg['services'][
+                    'service_type'] = detail[2]
+                element['medical_service_name'] = detail[3]
+                price = database.get_database().getOne(
+                    'medical_service_table',
+                    ['price'],
+                    ('id=%s', [detail[4]])
+                )
+                if price:
+                    element['medical_service_price'] = price[0]
+                msg['services']['data'].append(element)
+
+        return msg
+    else:
+        return dict()
